@@ -10,6 +10,7 @@ const {
   title,
   description = "Logos AI is a free Bible study app with optional upgrades, a richer desktop app, and a web-friendly on-ramp.",
 } = Astro.props;
+const logoUrl = new URL("/logos-logo.png", Astro.site ?? Astro.url).href;
 ---
 
 <!doctype html>
@@ -20,10 +21,15 @@ const {
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="theme-color" content="#06111c" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={Astro.url.href} />
+    <meta property="og:image" content={logoUrl} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={logoUrl} />
   </head>
   <body class="bg-bg text-text">
     <slot />
