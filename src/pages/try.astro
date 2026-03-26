@@ -1,0 +1,29 @@
+---
+import LogosReaderApp from "../components/reader/LogosReaderApp";
+import SiteLayout from "../layouts/SiteLayout.astro";
+---
+
+<SiteLayout
+  title="Try Logos AI"
+  description="A web-first Logos AI reader that mirrors the desktop layout for reading and passage search."
+>
+  <main class="pb-16 pt-8">
+    <div class="shell">
+      <div class="mb-8 flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <p class="eyebrow">Try It Now</p>
+          <h1 class="mt-2 font-display text-5xl text-text">Scripture in the same visual language as the desktop app.</h1>
+          <p class="mt-4 max-w-3xl text-base leading-8 text-muted">
+            This browser version keeps the reading desk, search flow, and selection model from the Wails app while
+            stripping out AI and read-aloud. It can load live Bible content directly when `PUBLIC_API_BIBLE_KEY` is
+            configured, while still leaving room for a backend-driven mode later if you want one.
+          </p>
+        </div>
+
+        <a href="/download" class="cta-secondary">Get the full desktop app</a>
+      </div>
+
+      <LogosReaderApp client:load />
+    </div>
+  </main>
+</SiteLayout>

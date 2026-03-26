@@ -1,0 +1,78 @@
+---
+interface Props {
+  current?: "home" | "pricing" | "download" | "try";
+}
+
+const { current = "home" } = Astro.props;
+
+const links = [
+  { href: "/", label: "Product", key: "home" },
+  { href: "/try", label: "Try It Now", key: "try" },
+  { href: "/pricing", label: "Pricing", key: "pricing" },
+  { href: "/download", label: "Download", key: "download" },
+  { href: "https://docs.logos-ai.online", label: "Docs", key: "docs" },
+  { href: "https://blog.logos-ai.online", label: "Blog", key: "blog" },
+];
+---
+
+<div class="relative overflow-hidden">
+  <div class="pointer-events-none absolute inset-0 bg-grid-fade grid-frame opacity-[0.08]"></div>
+  <div class="pointer-events-none absolute left-[-8rem] top-10 h-72 w-72 rounded-full bg-gold/10 blur-3xl"></div>
+  <div class="pointer-events-none absolute right-[-6rem] top-28 h-72 w-72 rounded-full bg-accent/10 blur-3xl"></div>
+
+  <header class="sticky top-0 z-40 border-b border-white/5 bg-bg/80 backdrop-blur-xl">
+    <div class="shell flex items-center justify-between gap-4 py-4">
+      <a href="/" class="flex items-center gap-3">
+        <span class="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-gold/35 bg-gold/10 text-lg text-gold">
+          ✝
+        </span>
+        <div>
+          <div class="font-display text-xl text-text">Logos AI</div>
+          <div class="text-xs uppercase tracking-[0.22em] text-muted">Bible app and web funnel</div>
+        </div>
+      </a>
+
+      <nav class="hidden items-center gap-1 lg:flex">
+        {links.map((link) => (
+          <a
+            href={link.href}
+            class:list={[
+              "nav-link",
+              current === link.key && "bg-white/5 text-text",
+            ]}
+            target={link.href.startsWith("https://") ? "_blank" : undefined}
+            rel={link.href.startsWith("https://") ? "noreferrer" : undefined}
+          >
+            {link.label}
+          </a>
+        ))}
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <a href="/try" class="hidden md:inline-flex cta-secondary">Open demo</a>
+        <a href="/download" class="cta-primary">Download app</a>
+      </div>
+    </div>
+  </header>
+
+  <slot />
+
+  <footer class="border-t border-white/5 py-10">
+    <div class="shell flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+      <div>
+        <div class="font-display text-2xl text-text">Logos AI</div>
+        <p class="mt-2 max-w-2xl text-sm leading-7 text-muted">
+          Free to start. Useful enough to recommend. Paid when convenience, managed access, and richer workflows save
+          people time.
+        </p>
+      </div>
+
+      <div class="flex flex-wrap gap-3 text-sm text-muted">
+        <a href="/pricing" class="nav-link">Pricing</a>
+        <a href="/download" class="nav-link">Download</a>
+        <a href="https://docs.logos-ai.online" target="_blank" rel="noreferrer" class="nav-link">Docs</a>
+        <a href="https://blog.logos-ai.online" target="_blank" rel="noreferrer" class="nav-link">Blog</a>
+      </div>
+    </div>
+  </footer>
+</div>

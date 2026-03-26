@@ -1,0 +1,87 @@
+---
+import PageFrame from "../components/PageFrame.astro";
+import SiteLayout from "../layouts/SiteLayout.astro";
+---
+
+<SiteLayout
+  title="Logos AI Pricing"
+  description="A simple three-lane pricing model for Logos AI: Free, BYOK, and Managed."
+>
+  <PageFrame current="pricing">
+    <main class="shell py-16">
+      <section class="max-w-4xl animate-rise">
+        <p class="eyebrow">Pricing</p>
+        <h1 class="mt-4 section-title">Free to start. Paid when convenience removes friction.</h1>
+        <p class="mt-6 section-copy">
+          Keep pricing easy to understand: a meaningful free core, BYOK for power users, and a managed plan for people
+          who want setup removed and the whole thing working out of the box.
+        </p>
+      </section>
+
+      <section class="mt-10 grid gap-6 lg:grid-cols-3">
+        <article class="surface-card p-8">
+          <p class="text-sm uppercase tracking-[0.22em] text-muted">Free</p>
+          <div class="mt-4 font-display text-5xl text-text">$0</div>
+          <p class="mt-5 text-sm leading-7 text-muted">
+            Bible reading, lightweight browser demo, app download, limited study help, and a credible first experience.
+          </p>
+          <ul class="mt-6 space-y-3 text-sm text-muted">
+            <li>Meaningful reading experience</li>
+            <li>Downloadable desktop app</li>
+            <li>Basic usage without friction</li>
+            <li>Enough value to build trust</li>
+          </ul>
+        </article>
+
+        <article class="surface-card border-accent/40 bg-accent/5 p-8">
+          <p class="text-sm uppercase tracking-[0.22em] text-accent">Bring Your Own Key</p>
+          <div class="mt-4 font-display text-5xl text-text">Control</div>
+          <p class="mt-5 text-sm leading-7 text-muted">
+            Already have an API key? Plug it in and unlock advanced features on your terms without forcing Logos AI to
+            absorb the whole usage bill.
+          </p>
+          <ul class="mt-6 space-y-3 text-sm text-muted">
+            <li>No Logos AI monthly fee for the core BYOK path</li>
+            <li>Best fit for technical users</li>
+            <li>Advanced users keep provider-level control</li>
+            <li>Strong zero-cost path for power usage</li>
+          </ul>
+        </article>
+
+        <article class="surface-card border-gold/40 bg-gold/5 p-8">
+          <p class="text-sm uppercase tracking-[0.22em] text-gold">Managed</p>
+          <div class="mt-4 font-display text-5xl text-text">$5-$15</div>
+          <p class="mt-5 text-sm leading-7 text-muted">
+            Let Logos AI handle setup, hosting, and convenience for you. This is the main monetization path.
+          </p>
+          <ul class="mt-6 space-y-3 text-sm text-muted">
+            <li>Instant AI access</li>
+            <li>No API key setup</li>
+            <li>Premium voices and saved history</li>
+            <li>Priority usage and richer commentary tools</li>
+          </ul>
+        </article>
+      </section>
+
+      <section class="mt-10 grid gap-6 lg:grid-cols-2">
+        <div class="surface-card p-8">
+          <p class="eyebrow">Future Packs</p>
+          <h2 class="mt-3 font-display text-4xl text-text">Sell accelerators, not ransom.</h2>
+          <p class="mt-4 text-sm leading-7 text-muted">
+            Premium upgrades should make serious users faster, not make the free product feel fake. Good candidates:
+            sermon prep, original languages, premium voices, church tools, and export-heavy workflows.
+          </p>
+        </div>
+
+        <div class="surface-card p-8">
+          <p class="eyebrow">Messaging Rule</p>
+          <h2 class="mt-3 font-display text-4xl text-text">Do not complain about costs.</h2>
+          <p class="mt-4 text-sm leading-7 text-muted">
+            Lead with choice and convenience instead. "Use your own API key, or let Logos AI handle everything for you"
+            is strong positioning. "I need to charge because APIs cost money" is weak positioning.
+          </p>
+        </div>
+      </section>
+    </main>
+  </PageFrame>
+</SiteLayout>

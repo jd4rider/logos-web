@@ -1,11 +1,260 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import PageFrame from "../components/PageFrame.astro";
+import SiteLayout from "../layouts/SiteLayout.astro";
 ---
 
-<Layout>
-	<Welcome />
-</Layout>
+<SiteLayout
+  title="Logos AI"
+  description="Study the Bible with AI online or offline, start free, bring your own key when you want control, or upgrade into a managed experience."
+>
+  <PageFrame current="home">
+    <main>
+      <section class="shell grid gap-10 py-20 lg:grid-cols-[1.2fr_0.9fr] lg:items-center">
+        <div class="animate-rise">
+          <p class="eyebrow">Study the Bible with AI - online or offline.</p>
+          <h1 class="mt-4 max-w-4xl font-display text-6xl leading-tight text-text md:text-7xl">
+            A free Bible study desk that starts in the browser and gets richer when you install the app.
+          </h1>
+          <p class="mt-6 section-copy">
+            Use Logos AI in your browser for a guided reading experience, then move into the desktop app for offline
+            study, read-aloud, AI commentary, and deeper workflows. Keep the free core meaningful. Charge for
+            convenience, setup removal, and richer output.
+          </p>
+
+          <div class="mt-8 flex flex-wrap gap-4">
+            <a href="/try" class="cta-primary">Try web version</a>
+            <a href="/download" class="cta-secondary">Download app</a>
+            <a href="/pricing" class="cta-secondary">View pricing</a>
+          </div>
+
+          <div class="mt-10 flex flex-wrap gap-3 text-sm">
+            <span class="rounded-full border border-gold/30 bg-gold/10 px-4 py-2 text-gold">Free core</span>
+            <span class="rounded-full border border-accent/30 bg-accent/10 px-4 py-2 text-accent">BYOK ready</span>
+            <span class="rounded-full border border-border bg-white/5 px-4 py-2 text-muted">Managed upgrade path</span>
+          </div>
+        </div>
+
+        <div class="animate-float">
+          <div class="surface-card overflow-hidden p-4">
+            <div class="rounded-[1.7rem] border border-border/80 bg-bg/60 p-4">
+              <div class="mb-4 flex items-center justify-between">
+                <div>
+                  <div class="text-xs uppercase tracking-[0.22em] text-muted">Try It Now</div>
+                  <div class="mt-1 font-display text-3xl text-text">Web Reader</div>
+                </div>
+                <span class="rounded-full border border-gold/35 bg-gold/10 px-3 py-1 text-xs uppercase tracking-[0.2em] text-gold">
+                  Demo
+                </span>
+              </div>
+
+              <div class="grid gap-4 lg:grid-cols-[220px_1fr]">
+                <div class="rounded-[1.4rem] border border-border bg-surface/70 p-4">
+                  <div class="text-xs uppercase tracking-[0.22em] text-muted">Library</div>
+                  <div class="mt-4 space-y-3">
+                    <div class="rounded-2xl border border-gold/45 bg-highlight/70 px-4 py-3">
+                      <div class="font-display text-lg text-text">DEMO</div>
+                      <div class="mt-1 text-xs uppercase tracking-[0.18em] text-muted">Guided Web Demo</div>
+                    </div>
+                    <div class="rounded-2xl border border-border bg-bg/45 px-4 py-3 text-sm text-text">Genesis</div>
+                    <div class="rounded-2xl border border-border bg-bg/45 px-4 py-3 text-sm text-text">Psalms</div>
+                    <div class="rounded-2xl border border-border bg-bg/45 px-4 py-3 text-sm text-text">John</div>
+                  </div>
+                </div>
+
+                <div class="rounded-[1.4rem] border border-border bg-surface/70 p-5">
+                  <div class="mb-4 flex items-center justify-between">
+                    <div>
+                      <div class="text-xs uppercase tracking-[0.22em] text-muted">Reader</div>
+                      <div class="mt-1 font-display text-2xl text-text">Psalm 23</div>
+                    </div>
+                    <span class="rounded-full border border-accent/30 bg-accent/10 px-3 py-1 text-xs uppercase tracking-[0.2em] text-accent">
+                      Search
+                    </span>
+                  </div>
+                  <p class="font-serif text-lg leading-8 text-text">
+                    <span class="mr-1 text-xs font-semibold uppercase tracking-[0.2em] text-gold">1</span>
+                    The Lord is my shepherd; I shall not want. <span class="ml-2 mr-1 text-xs font-semibold uppercase tracking-[0.2em] text-gold">2</span>
+                    He makes me lie down in green pastures.
+                  </p>
+                  <div class="mt-6 grid gap-3 md:grid-cols-3">
+                    <div class="rounded-2xl border border-border bg-bg/45 px-4 py-3">
+                      <div class="text-xs uppercase tracking-[0.18em] text-muted">No AI</div>
+                      <div class="mt-2 text-sm text-text">Just reading and search in the browser.</div>
+                    </div>
+                    <div class="rounded-2xl border border-border bg-bg/45 px-4 py-3">
+                      <div class="text-xs uppercase tracking-[0.18em] text-muted">Desktop depth</div>
+                      <div class="mt-2 text-sm text-text">Voices, AI commentary, offline, and exports in the app.</div>
+                    </div>
+                    <div class="rounded-2xl border border-border bg-bg/45 px-4 py-3">
+                      <div class="text-xs uppercase tracking-[0.18em] text-muted">Upgrade path</div>
+                      <div class="mt-2 text-sm text-text">Managed AI later when convenience becomes worth paying for.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="shell py-14">
+        <div class="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+          <article class="surface-card p-6">
+            <p class="eyebrow">Bible reading</p>
+            <h2 class="mt-3 font-display text-3xl text-text">Immediate value</h2>
+            <p class="mt-4 text-sm leading-7 text-muted">
+              The free tier is still good enough to recommend. Reading, passage search, and lightweight discovery happen
+              before money enters the conversation.
+            </p>
+          </article>
+
+          <article class="surface-card p-6">
+            <p class="eyebrow">Optional AI</p>
+            <h2 class="mt-3 font-display text-3xl text-text">Convenience pays</h2>
+            <p class="mt-4 text-sm leading-7 text-muted">
+              BYOK covers power users. Managed AI removes setup friction. Packs and subscriptions accelerate work
+              without holding the core experience hostage.
+            </p>
+          </article>
+
+          <article class="surface-card p-6">
+            <p class="eyebrow">Desktop app</p>
+            <h2 class="mt-3 font-display text-3xl text-text">Richer tooling</h2>
+            <p class="mt-4 text-sm leading-7 text-muted">
+              The downloadable app stays the primary product for offline study, voices, AI commentary, and future
+              sermon-prep or church workflows.
+            </p>
+          </article>
+
+          <article class="surface-card p-6">
+            <p class="eyebrow">Trust</p>
+            <h2 class="mt-3 font-display text-3xl text-text">Privacy matters</h2>
+            <p class="mt-4 text-sm leading-7 text-muted">
+              Lead with usefulness, offline capability, and user control. Let pricing read as a convenience upgrade,
+              not a plea about infrastructure cost.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="shell py-14">
+        <div class="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
+          <div class="surface-card p-8">
+            <p class="eyebrow">Website Funnel</p>
+            <h2 class="mt-3 section-title">The browser is the on-ramp, not the whole product.</h2>
+            <p class="mt-5 section-copy">
+              Let visitors feel value quickly in the web demo, then route them toward the richer desktop app and the
+              later managed plans. The site should act as explanation layer, proof layer, download funnel, and upgrade
+              funnel all at once.
+            </p>
+            <div class="mt-8 grid gap-4 md:grid-cols-3">
+              <div class="rounded-[1.6rem] border border-border bg-bg/45 p-5">
+                <div class="text-xs uppercase tracking-[0.18em] text-muted">Top</div>
+                <div class="mt-3 text-2xl font-display text-text">Discover</div>
+                <p class="mt-3 text-sm leading-7 text-muted">Landing page, blog posts, clips, and community shares.</p>
+              </div>
+              <div class="rounded-[1.6rem] border border-border bg-bg/45 p-5">
+                <div class="text-xs uppercase tracking-[0.18em] text-muted">Middle</div>
+                <div class="mt-3 text-2xl font-display text-text">Try</div>
+                <p class="mt-3 text-sm leading-7 text-muted">Interactive reader, screenshots, and clear free versus paid positioning.</p>
+              </div>
+              <div class="rounded-[1.6rem] border border-border bg-bg/45 p-5">
+                <div class="text-xs uppercase tracking-[0.18em] text-muted">Bottom</div>
+                <div class="mt-3 text-2xl font-display text-text">Upgrade</div>
+                <p class="mt-3 text-sm leading-7 text-muted">Managed access, premium voices, sermon tools, and cloud conveniences.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="surface-card p-8">
+            <p class="eyebrow">Audience Segments</p>
+            <div class="mt-5 space-y-4">
+              <div class="rounded-[1.6rem] border border-border bg-bg/45 p-5">
+                <div class="text-lg font-semibold text-text">Everyday Bible users</div>
+                <p class="mt-2 text-sm leading-7 text-muted">Read, listen, and explore Scripture with AI help.</p>
+              </div>
+              <div class="rounded-[1.6rem] border border-border bg-bg/45 p-5">
+                <div class="text-lg font-semibold text-text">Pastors and church leaders</div>
+                <p class="mt-2 text-sm leading-7 text-muted">Go from passage to study outline faster.</p>
+              </div>
+              <div class="rounded-[1.6rem] border border-border bg-bg/45 p-5">
+                <div class="text-lg font-semibold text-text">Christian tech and power users</div>
+                <p class="mt-2 text-sm leading-7 text-muted">A flexible Bible AI app for technical users who want control.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="shell py-14">
+        <div class="surface-card p-8">
+          <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p class="eyebrow">Pricing Paths</p>
+              <h2 class="mt-3 section-title">Keep it simple early.</h2>
+              <p class="mt-5 section-copy">
+                Free gets adoption. BYOK handles zero-cost power users. Managed access becomes the main monetization
+                lane once setup removal and reliability are worth paying for.
+              </p>
+            </div>
+
+            <a href="/pricing" class="cta-secondary">Full pricing page</a>
+          </div>
+
+          <div class="mt-8 grid gap-5 lg:grid-cols-3">
+            <div class="rounded-[1.8rem] border border-border bg-bg/45 p-6">
+              <div class="text-sm uppercase tracking-[0.22em] text-muted">Free</div>
+              <div class="mt-3 font-display text-4xl text-text">$0</div>
+              <p class="mt-4 text-sm leading-7 text-muted">Browser demo, app download, basic study, and enough value to build trust.</p>
+            </div>
+            <div class="rounded-[1.8rem] border border-accent/40 bg-accent/5 p-6">
+              <div class="text-sm uppercase tracking-[0.22em] text-accent">Bring your own key</div>
+              <div class="mt-3 font-display text-4xl text-text">Flexible</div>
+              <p class="mt-4 text-sm leading-7 text-muted">Technical users keep full control without needing Logos AI to absorb every token cost.</p>
+            </div>
+            <div class="rounded-[1.8rem] border border-gold/40 bg-gold/5 p-6">
+              <div class="text-sm uppercase tracking-[0.22em] text-gold">Managed</div>
+              <div class="mt-3 font-display text-4xl text-text">$5-$15</div>
+              <p class="mt-4 text-sm leading-7 text-muted">No setup, hosted AI, premium voices, saved history, and priority usage.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="shell py-14">
+        <div class="grid gap-5 lg:grid-cols-2">
+          <div class="surface-card p-8">
+            <p class="eyebrow">Download</p>
+            <h2 class="mt-3 section-title">The full app is where the richer workflows live.</h2>
+            <p class="mt-5 section-copy">
+              Download the desktop app for read-aloud, offline-friendly study, AI commentary, and more advanced study
+              flows than the browser should try to carry.
+            </p>
+            <div class="mt-8 flex flex-wrap gap-4">
+              <a href="/download" class="cta-primary">Open downloads</a>
+              <a href="https://docs.logos-ai.online" target="_blank" rel="noreferrer" class="cta-secondary">Read setup docs</a>
+            </div>
+          </div>
+
+          <div class="surface-card p-8">
+            <p class="eyebrow">FAQ</p>
+            <div class="mt-5 space-y-4">
+              <div>
+                <h3 class="text-lg font-semibold text-text">Why is some AI paid?</h3>
+                <p class="mt-2 text-sm leading-7 text-muted">The free core stays useful, while managed AI removes setup and bundles convenience.</p>
+              </div>
+              <div>
+                <h3 class="text-lg font-semibold text-text">Can I use my own API key?</h3>
+                <p class="mt-2 text-sm leading-7 text-muted">Yes. BYOK is the control-first option for technical users and the zero-cost power-user path.</p>
+              </div>
+              <div>
+                <h3 class="text-lg font-semibold text-text">Does it work offline?</h3>
+                <p class="mt-2 text-sm leading-7 text-muted">The desktop app is the main offline-friendly experience. The browser is optimized for discovery and lighter use.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </PageFrame>
+</SiteLayout>
