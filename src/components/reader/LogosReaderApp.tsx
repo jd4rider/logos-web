@@ -20,6 +20,33 @@ function sourceBadgeClass(source: string) {
   return "border-accent/30 bg-accent/10 text-accent";
 }
 
+function sourceLabel(source: string) {
+  if (source === "demo") {
+    return "fallback";
+  }
+  return "live";
+}
+
+function preferredBible(bibles: BibleSummary[]) {
+  return (
+    bibles.find((bible) => bible.abbreviation.toUpperCase() === "BSB") ??
+    bibles.find((bible) => bible.abbreviation.toUpperCase() === "KJV") ??
+    bibles[0] ??
+    null
+  );
+}
+
+function preferredBook(books: Book[]) {
+  return books.find((book) => book.id === "JHN") ?? books.find((book) => book.id === "PSA") ?? books[0] ?? null;
+}
+
+function preferredChapter(bookId: string, chapters: Chapter[]) {
+  if (bookId === "PSA") {
+    return chapters.find((chapter) => chapter.number === "23") ?? chapters[0] ?? null;
+  }
+  return chapters.find((chapter) => chapter.number === "1") ?? chapters[0] ?? null;
+}
+
 export default function LogosReaderApp() {
   const liveAvailable = hasLiveApi();
   const [mode, setMode] = useState<"demo" | "live">(liveAvailable ? "live" : "demo");
@@ -37,8 +64,9 @@ export default function LogosReaderApp() {
   useEffect(() => {
     let cancelled = false;
 
-    async function loadBibles() {
-      setBusyLabel(mode === "live" ? "Loading live library" : "Loading guided demo");
+    async function bootstrapReader() {
+      setBusyLabel(mode === "live" ? "Loading translations" : "Loading fallback library");
+      setError(null);
       setCurrentBible(null);
       setCurrentBook(null);
       setCurrentChapter(null);
@@ -49,12 +77,44 @@ export default function LogosReaderApp() {
 
       try {
         const nextBibles = mode === "live" ? await liveApi.getBibles("eng") : getDemoBibles();
+        if (cancelled) {
+          return;
+        }
+
+        setBibles(nextBibles);
+
+        const bible = mode === "demo" ? demoBible : preferredBible(nextBibles);
+        if (!bible) {
+          return;
+        }
+        setCurrentBible(bible);
+
+        const nextBooks = mode === "live" ? await liveApi.getBooks(bible.id) : getDemoBooks();
+        if (cancelled) {
+          return;
+        }
+        setBooks(nextBooks);
+
+        const book = preferredBook(nextBooks);
+        if (!book) {
+          return;
+        }
+        setCurrentBook(book);
+
+        const nextChapters = mode === "live" ? await liveApi.getChapters(bible.id, book.id) : getDemoChapters(book.id);
+        if (cancelled) {
+          return;
+        }
+        setChapters(nextChapters);
+
+        const chapter = preferredChapter(book.id, nextChapters);
+        if (!chapter) {
+          return;
+        }
+
+        const content = mode === "live" ? await liveApi.getChapter(bible.id, chapter.id) : getDemoChapter(chapter.id);
         if (!cancelled) {
-          setBibles(nextBibles);
-          if (mode === "demo") {
-            setCurrentBible(demoBible);
-            setBooks(getDemoBooks());
-          }
+          setCurrentChapter(content);
         }
       } catch (loadError) {
         if (!cancelled) {
@@ -70,7 +130,7 @@ export default function LogosReaderApp() {
       }
     }
 
-    void loadBibles();
+    void bootstrapReader();
 
     return () => {
       cancelled = true;
@@ -107,8 +167,7 @@ export default function LogosReaderApp() {
     setBusyLabel(`Loading ${book.name}`);
 
     try {
-      const nextChapters =
-        mode === "live" ? await liveApi.getChapters(currentBible.id, book.id) : getDemoChapters(book.id);
+      const nextChapters = mode === "live" ? await liveApi.getChapters(currentBible.id, book.id) : getDemoChapters(book.id);
       setChapters(nextChapters);
     } catch (loadError) {
       setError(explainError(loadError));
@@ -117,13 +176,22 @@ export default function LogosReaderApp() {
     }
   }
 
-  async function loadChapter(chapterId: string) {
-    if (!currentBible) {
+  async function loadChapter(chapterId: string, bookId = currentBook?.id) {
+    if (!currentBible || !bookId) {
       return;
     }
 
     setBusyLabel(`Opening ${chapterId}`);
     try {
+      if (currentBook?.id !== bookId) {
+        const nextBook = books.find((book) => book.id === bookId);
+        if (nextBook) {
+          setCurrentBook(nextBook);
+        }
+        const nextChapters = mode === "live" ? await liveApi.getChapters(currentBible.id, bookId) : getDemoChapters(bookId);
+        setChapters(nextChapters);
+      }
+
       const content = mode === "live" ? await liveApi.getChapter(currentBible.id, chapterId) : getDemoChapter(chapterId);
       setCurrentChapter(content);
 
@@ -139,21 +207,7 @@ export default function LogosReaderApp() {
   }
 
   async function openSearchResult(chapterId: string, bookId: string) {
-    const targetBook = books.find((book) => book.id === bookId);
-    if (targetBook && currentBook?.id !== bookId) {
-      setCurrentBook(targetBook);
-      if (mode === "live" && currentBible) {
-        try {
-          setChapters(await liveApi.getChapters(currentBible.id, bookId));
-        } catch (loadError) {
-          setError(explainError(loadError));
-        }
-      } else {
-        setChapters(getDemoChapters(bookId));
-      }
-    }
-
-    await loadChapter(chapterId);
+    await loadChapter(chapterId, bookId);
     setSearchOpen(false);
   }
 
@@ -164,8 +218,7 @@ export default function LogosReaderApp() {
 
     setBusyLabel(`Searching ${currentBible.abbreviation}`);
     try {
-      const results =
-        mode === "live" ? await liveApi.search(currentBible.id, query, 30) : searchDemoLibrary(query, 30);
+      const results = mode === "live" ? await liveApi.search(currentBible.id, query, 30) : searchDemoLibrary(query, 30);
       setSearchResults(results);
       setSearchOpen(true);
     } catch (searchError) {
@@ -215,7 +268,7 @@ export default function LogosReaderApp() {
     }
 
     if (currentChapter) {
-      return <ReaderPane chapter={currentChapter} />;
+      return <ReaderPane chapter={currentChapter} onOpenChapter={loadChapter} />;
     }
 
     if (currentBook) {
@@ -225,8 +278,8 @@ export default function LogosReaderApp() {
             <p className="mb-3 text-xs uppercase tracking-[0.24em] text-muted">Open Chapter</p>
             <h2 className="font-display text-4xl text-text">{currentBook.name}</h2>
             <p className="mt-4 max-w-2xl text-base leading-7 text-muted">
-              The try flow mirrors the desktop reader: choose a chapter from the left rail to open a passage, then use
-              search to jump around quickly.
+              Choose a chapter from the left rail to open the passage in the reader. Search stays available from the
+              header so you can jump to any matching verse without leaving the desk.
             </p>
           </div>
         </div>
@@ -241,14 +294,13 @@ export default function LogosReaderApp() {
               <span
                 className={`rounded-full border px-3 py-1 text-[0.68rem] uppercase tracking-[0.22em] ${sourceBadgeClass(currentBible.source)}`}
               >
-                {currentBible.source}
+                {sourceLabel(currentBible.source)}
               </span>
               <span className="text-xs uppercase tracking-[0.24em] text-muted">{currentBible.language.name}</span>
             </div>
             <h2 className="font-display text-4xl text-text">{currentBible.name}</h2>
             <p className="mt-4 max-w-2xl text-base leading-7 text-muted">
-              Browse books from the left rail or open search to jump directly to a passage. The public deployment ships
-              with a bundled guided demo, and live mode can point at the shared Logos backend when it is configured.
+              Browse books from the left rail or open search to jump directly into a passage in this translation.
             </p>
           </div>
         </div>
@@ -256,63 +308,33 @@ export default function LogosReaderApp() {
     }
 
     return (
-      <div className="mx-auto flex h-full w-full max-w-5xl items-center justify-center px-7 py-8">
-        <div className="grid w-full gap-5 lg:grid-cols-[1.4fr_1fr]">
-          <section className="rounded-[2.5rem] border border-border/80 bg-surface/75 p-8 shadow-panel backdrop-blur-xl">
-            <p className="mb-3 text-xs uppercase tracking-[0.28em] text-gold">Logos AI</p>
-            <h1 className="max-w-xl font-display text-5xl leading-tight text-text">
-              A Wails-inspired reading desk for the web, tuned for discovery.
-            </h1>
-            <p className="mt-5 max-w-2xl text-base leading-7 text-muted">
-              The hosted version focuses on scripture reading and search. AI commentary, voices, and deeper workflows
-              stay in the downloadable app where they belong.
-            </p>
-          </section>
-
-          <section className="rounded-[2.5rem] border border-border/80 bg-bg/55 p-6 shadow-panel backdrop-blur-xl">
-            <div className="space-y-4">
-              <div className="rounded-[1.7rem] border border-border bg-surface/75 p-4">
-                <p className="text-xs uppercase tracking-[0.22em] text-muted">Free on-ramp</p>
-                <p className="mt-2 text-sm leading-6 text-text">
-                  The public site shows a guided demo first, then funnels readers into downloads, BYOK, or a managed
-                  plan later.
-                </p>
-              </div>
-              <div className="rounded-[1.7rem] border border-border bg-surface/75 p-4">
-                <p className="text-xs uppercase tracking-[0.22em] text-muted">Desktop-first depth</p>
-                <p className="mt-2 text-sm leading-6 text-text">
-                  Richer AI commentary, offline workflows, and read-aloud stay in the desktop app instead of bloating
-                  the browser surface.
-                </p>
-              </div>
-              <div className="rounded-[1.7rem] border border-border bg-surface/75 p-4">
-                <p className="text-xs uppercase tracking-[0.22em] text-muted">Future live mode</p>
-                <p className="mt-2 text-sm leading-6 text-text">
-                  When a managed backend is available, the same interface can point at it without redesigning the app.
-                </p>
-              </div>
-            </div>
-          </section>
+      <div className="mx-auto flex h-full w-full max-w-4xl items-center justify-center px-7 py-8">
+        <div className="w-full rounded-[2.3rem] border border-border/80 bg-surface/70 p-8 shadow-panel backdrop-blur-xl">
+          <p className="mb-3 text-xs uppercase tracking-[0.24em] text-muted">Loading Library</p>
+          <h1 className="font-display text-4xl text-text">Preparing the reader...</h1>
+          <p className="mt-4 max-w-2xl text-base leading-7 text-muted">
+            The reader will open a translation and passage automatically when the library is ready.
+          </p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="surface-card overflow-hidden">
-      <div className="flex h-[85vh] min-h-[720px] flex-col text-text">
+    <div className="surface-card overflow-hidden rounded-none border-0 shadow-none">
+      <div className="flex min-h-screen flex-col text-text">
         <header className="relative z-10 border-b border-border/80 bg-bg/70 px-5 py-4 backdrop-blur-xl">
           <div className="flex items-center justify-between gap-4">
             <div className="min-w-0">
               <div className="mb-1 flex flex-wrap items-center gap-3">
                 <span className="rounded-full border border-gold/35 bg-gold/10 px-3 py-1 text-[0.68rem] uppercase tracking-[0.24em] text-gold">
-                  Web Reader
+                  Bible Reader
                 </span>
                 {currentBible && (
                   <span
                     className={`rounded-full border px-3 py-1 text-[0.68rem] uppercase tracking-[0.22em] ${sourceBadgeClass(currentBible.source)}`}
                   >
-                    {currentBible.source}
+                    {sourceLabel(currentBible.source)}
                   </span>
                 )}
               </div>
@@ -327,7 +349,7 @@ export default function LogosReaderApp() {
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center justify-end gap-2">
               {currentBible && (
                 <button
                   type="button"
@@ -346,6 +368,9 @@ export default function LogosReaderApp() {
                   Back
                 </button>
               )}
+              <a href="/" className="rounded-full border border-border bg-bg/50 px-4 py-2 text-sm text-text transition hover:border-gold/50 hover:text-gold">
+                Home
+              </a>
             </div>
           </div>
         </header>
@@ -361,7 +386,7 @@ export default function LogosReaderApp() {
           </div>
         )}
 
-        <div className="grid min-h-0 flex-1 lg:grid-cols-[320px_minmax(0,1fr)_320px]">
+        <div className="grid min-h-0 flex-1 lg:grid-cols-[320px_minmax(0,1fr)_300px]">
           <Sidebar
             bibles={bibles}
             books={books}
@@ -372,7 +397,7 @@ export default function LogosReaderApp() {
             currentChapterId={currentChapter?.id}
             onSelectBible={selectBible}
             onSelectBook={selectBook}
-            onSelectChapter={(chapter) => void loadChapter(chapter.id)}
+            onSelectChapter={(chapter) => void loadChapter(chapter.id, chapter.bookId)}
           />
 
           <main className="min-h-0 overflow-hidden">{renderMainPane()}</main>
@@ -380,35 +405,20 @@ export default function LogosReaderApp() {
           <aside className="hidden min-h-0 overflow-y-auto border-l border-border/80 bg-surface/40 px-4 py-5 backdrop-blur-xl lg:block">
             <div className="space-y-5">
               <section className="rounded-[1.75rem] border border-border/80 bg-bg/40 p-5 shadow-panel">
-                <p className="mb-3 text-xs uppercase tracking-[0.24em] text-muted">Mode</p>
-                <div className="grid gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setMode("demo")}
-                    className={`rounded-[1.2rem] border px-4 py-3 text-left transition ${
-                      mode === "demo" ? "border-gold bg-gold/10 text-gold" : "border-border bg-surface/70 text-text"
-                    }`}
-                  >
-                    <div className="text-sm font-semibold">Guided demo</div>
-                    <div className="mt-1 text-xs uppercase tracking-[0.18em] text-muted">Bundled passages</div>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => liveAvailable && setMode("live")}
-                    disabled={!liveAvailable}
-                    className={`rounded-[1.2rem] border px-4 py-3 text-left transition ${
-                      mode === "live"
-                        ? "border-accent bg-accent/10 text-accent"
-                        : "border-border bg-surface/70 text-text disabled:cursor-not-allowed disabled:opacity-45"
-                    }`}
-                  >
-                    <div className="text-sm font-semibold">Live API</div>
-                    <div className="mt-1 text-xs uppercase tracking-[0.18em] text-muted">
-                      {liveAvailable
-                        ? "Powered by PUBLIC_API_BIBLE_KEY or PUBLIC_LOGOS_API_BASE"
-                        : "Not configured on this deployment"}
-                    </div>
-                  </button>
+                <p className="mb-3 text-xs uppercase tracking-[0.24em] text-muted">Selection</p>
+                <div className="space-y-3">
+                  <div className="rounded-[1.35rem] border border-border bg-surface/70 px-4 py-3">
+                    <div className="text-xs uppercase tracking-[0.22em] text-muted">Translation</div>
+                    <div className="mt-1 text-sm text-text">{currentBible?.name ?? "Loading translations..."}</div>
+                  </div>
+                  <div className="rounded-[1.35rem] border border-border bg-surface/70 px-4 py-3">
+                    <div className="text-xs uppercase tracking-[0.22em] text-muted">Book</div>
+                    <div className="mt-1 text-sm text-text">{currentBook?.name ?? "Choose a book"}</div>
+                  </div>
+                  <div className="rounded-[1.35rem] border border-border bg-surface/70 px-4 py-3">
+                    <div className="text-xs uppercase tracking-[0.22em] text-muted">Chapter</div>
+                    <div className="mt-1 text-sm text-text">{currentChapter?.reference ?? "Choose a chapter"}</div>
+                  </div>
                 </div>
               </section>
 
@@ -416,29 +426,39 @@ export default function LogosReaderApp() {
                 <p className="mb-3 text-xs uppercase tracking-[0.24em] text-muted">Status</p>
                 <div className="space-y-3">
                   <div className="rounded-[1.35rem] border border-border bg-surface/70 px-4 py-3">
-                    <div className="text-xs uppercase tracking-[0.22em] text-muted">Selection</div>
-                    <div className="mt-1 text-sm text-text">{currentBible?.abbreviation ?? "Choose a translation"}</div>
+                    <div className="text-xs uppercase tracking-[0.22em] text-muted">Source</div>
+                    <div className="mt-1 text-sm text-text">
+                      {mode === "live" ? "API.Bible live browser mode" : "Fallback bundled reader"}
+                    </div>
                   </div>
                   <div className="rounded-[1.35rem] border border-border bg-surface/70 px-4 py-3">
                     <div className="text-xs uppercase tracking-[0.22em] text-muted">Activity</div>
                     <div className="mt-1 text-sm text-text">{busyLabel || "Ready"}</div>
                   </div>
                   <div className="rounded-[1.35rem] border border-border bg-surface/70 px-4 py-3">
-                    <div className="text-xs uppercase tracking-[0.22em] text-muted">Deployment</div>
-                    <div className="mt-1 text-sm text-text">
-                      Static on GitHub Pages, with live browser reading enabled when the public API env is set.
-                    </div>
+                    <div className="text-xs uppercase tracking-[0.22em] text-muted">Search</div>
+                    <div className="mt-1 text-sm text-text">Use the search button to jump to matching verses in the current translation.</div>
                   </div>
                 </div>
               </section>
 
-              <section className="rounded-[1.75rem] border border-border/80 bg-bg/40 p-5 shadow-panel">
-                <p className="mb-3 text-xs uppercase tracking-[0.24em] text-muted">Next steps</p>
-                <div className="space-y-3 text-sm leading-7 text-muted">
-                  <p>Download the desktop app for AI commentary, offline workflows, and read-aloud tools.</p>
-                  <p>Use the docs site to plug in your own API setup or connect this web UI to a managed backend later.</p>
-                </div>
-              </section>
+              {mode === "demo" && (
+                <section className="rounded-[1.75rem] border border-gold/30 bg-gold/5 p-5 shadow-panel">
+                  <p className="mb-3 text-xs uppercase tracking-[0.24em] text-gold">Fallback Mode</p>
+                  <p className="text-sm leading-7 text-text">
+                    Live browser access is not available right now, so the reader fell back to bundled passages.
+                  </p>
+                  {liveAvailable && (
+                    <button
+                      type="button"
+                      onClick={() => setMode("live")}
+                      className="mt-4 rounded-full border border-gold bg-gold px-4 py-2 text-sm font-semibold text-bg transition hover:bg-[#ffd06d]"
+                    >
+                      Retry live mode
+                    </button>
+                  )}
+                </section>
+              )}
             </div>
           </aside>
         </div>

@@ -3,6 +3,7 @@ import type { ChapterContent } from "../../lib/types";
 
 interface Props {
   chapter: ChapterContent;
+  onOpenChapter?: (chapterId: string, bookId: string) => void;
 }
 
 function renderWordSegment(segment: string, paragraphIndex: number): ReactNode[] {
@@ -69,15 +70,37 @@ function parseContent(content: string): ReactNode[] {
   });
 }
 
-export default function ReaderPane({ chapter }: Props) {
+export default function ReaderPane({ chapter, onOpenChapter }: Props) {
   return (
     <div className="mx-auto flex h-full w-full max-w-4xl flex-col overflow-y-auto px-7 py-8">
       <div className="mb-6 rounded-[2rem] border border-border/80 bg-surface/70 p-6 shadow-panel backdrop-blur-xl">
-        <div className="mb-3 flex flex-wrap items-center gap-3">
-          <span className="rounded-full border border-gold/40 bg-gold/10 px-3 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-gold">
-            Reader
-          </span>
-          <span className="text-xs uppercase tracking-[0.24em] text-muted">{chapter.verseCount} verses</span>
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
+          <div className="flex flex-wrap items-center gap-3">
+            <span className="rounded-full border border-gold/40 bg-gold/10 px-3 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-gold">
+              Reader
+            </span>
+            <span className="text-xs uppercase tracking-[0.24em] text-muted">{chapter.verseCount} verses</span>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {chapter.previous && (
+              <button
+                type="button"
+                onClick={() => onOpenChapter?.(chapter.previous!.id, chapter.previous!.bookId)}
+                className="rounded-full border border-border bg-bg/50 px-4 py-2 text-sm text-text transition hover:border-gold/50 hover:text-gold"
+              >
+                Previous
+              </button>
+            )}
+            {chapter.next && (
+              <button
+                type="button"
+                onClick={() => onOpenChapter?.(chapter.next!.id, chapter.next!.bookId)}
+                className="rounded-full border border-border bg-bg/50 px-4 py-2 text-sm text-text transition hover:border-gold/50 hover:text-gold"
+              >
+                Next
+              </button>
+            )}
+          </div>
         </div>
         <h1 className="font-display text-4xl text-text">{chapter.reference}</h1>
       </div>

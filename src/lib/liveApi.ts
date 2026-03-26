@@ -4,6 +4,10 @@ const publicApiBibleKey = import.meta.env.PUBLIC_API_BIBLE_KEY ?? "";
 const liveApiBase = (import.meta.env.PUBLIC_LOGOS_API_BASE ?? "").replace(/\/$/, "");
 const directApiBase = "https://api.scripture.api.bible/v1";
 
+interface Envelope<T> {
+  data: T;
+}
+
 function assertLiveApi() {
   if (!liveApiBase && !publicApiBibleKey) {
     throw new Error("Live API mode is not configured for this deployment.");
@@ -22,27 +26,39 @@ async function fetchJSON<T>(path: string): Promise<T> {
   return response.json();
 }
 
+function unwrapData<T>(payload: T | Envelope<T>): T {
+  if (payload && typeof payload === "object" && "data" in payload) {
+    return payload.data;
+  }
+  return payload;
+}
+
 export function hasLiveApi() {
   return Boolean(liveApiBase || publicApiBibleKey);
 }
 
 export const liveApi = {
   async getBibles(language = "eng") {
-    const bibles = await fetchJSON<Omit<BibleSummary, "source">[]>(`/bibles?language=${language}`);
+    const query = language ? `?language=${language}` : "";
+    const bibles = unwrapData(
+      await fetchJSON<Omit<BibleSummary, "source">[] | Envelope<Omit<BibleSummary, "source">[]>>(`/bibles${query}`),
+    );
     return bibles.map((bible) => ({ ...bible, source: "api" as const }));
   },
-  getBooks(bibleId: string) {
-    return fetchJSON<Book[]>(`/bibles/${bibleId}/books`);
+  async getBooks(bibleId: string) {
+    return unwrapData(await fetchJSON<Book[] | Envelope<Book[]>>(`/bibles/${bibleId}/books`));
   },
-  getChapters(bibleId: string, bookId: string) {
-    return fetchJSON<Chapter[]>(`/bibles/${bibleId}/books/${bookId}/chapters`);
+  async getChapters(bibleId: string, bookId: string) {
+    return unwrapData(await fetchJSON<Chapter[] | Envelope<Chapter[]>>(`/bibles/${bibleId}/books/${bookId}/chapters`));
   },
-  getChapter(bibleId: string, chapterId: string) {
-    return fetchJSON<ChapterContent>(`/bibles/${bibleId}/chapters/${chapterId}`);
+  async getChapter(bibleId: string, chapterId: string) {
+    return unwrapData(await fetchJSON<ChapterContent | Envelope<ChapterContent>>(`/bibles/${bibleId}/chapters/${chapterId}`));
   },
-  search(bibleId: string, query: string, limit = 20) {
-    return fetchJSON<SearchData>(
-      `/bibles/${bibleId}/search?query=${encodeURIComponent(query)}&limit=${limit}`,
+  async search(bibleId: string, query: string, limit = 20) {
+    return unwrapData(
+      await fetchJSON<SearchData | Envelope<SearchData>>(
+        `/bibles/${bibleId}/search?query=${encodeURIComponent(query)}&limit=${limit}`,
+      ),
     );
   },
 };

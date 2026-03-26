@@ -23,6 +23,13 @@ function sourceBadge(source: string) {
   return "border-accent/30 bg-accent/10 text-accent";
 }
 
+function sourceLabel(source: string) {
+  if (source === "demo") {
+    return "fallback";
+  }
+  return "live";
+}
+
 function togglePanel(current: Panel | null, panel: Panel) {
   if (current === panel) {
     return null;
@@ -136,7 +143,7 @@ export default function Sidebar({
                       <span
                         className={`rounded-full border px-2 py-1 text-[0.62rem] uppercase tracking-[0.2em] ${sourceBadge(bible.source)}`}
                       >
-                        {bible.source}
+                        {sourceLabel(bible.source)}
                       </span>
                     </div>
                     <div className="text-sm text-text">{bible.name}</div>
@@ -156,7 +163,7 @@ export default function Sidebar({
                 <span
                   className={`rounded-full border px-2 py-1 text-[0.62rem] uppercase tracking-[0.2em] ${sourceBadge(currentBible.source)}`}
                 >
-                  {currentBible.source}
+                  {sourceLabel(currentBible.source)}
                 </span>
               </div>
               <div className="text-sm text-text">{currentBible.name}</div>

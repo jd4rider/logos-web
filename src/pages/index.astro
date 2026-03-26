@@ -5,32 +5,31 @@ import SiteLayout from "../layouts/SiteLayout.astro";
 
 <SiteLayout
   title="Logos AI"
-  description="Study the Bible with AI online or offline, start free, bring your own key when you want control, or upgrade into a managed experience."
+  description="Read, search, and study Scripture in the browser, then move into the full Logos AI app for offline access, audio, AI commentary, and deeper workflows."
 >
   <PageFrame current="home">
     <main>
-      <section class="shell grid gap-10 py-20 lg:grid-cols-[1.2fr_0.9fr] lg:items-center">
+      <section class="shell grid gap-10 py-20 lg:grid-cols-[1.15fr_0.95fr] lg:items-center">
         <div class="animate-rise">
-          <p class="eyebrow">Study the Bible with AI - online or offline.</p>
+          <p class="eyebrow">Read, search, and study Scripture online or offline.</p>
           <h1 class="mt-4 max-w-4xl font-display text-6xl leading-tight text-text md:text-7xl">
-            A free Bible study desk that starts in the browser and gets richer when you install the app.
+            A Bible study app for the browser, desktop, terminal, and private local workflows.
           </h1>
           <p class="mt-6 section-copy">
-            Use Logos AI in your browser for a guided reading experience, then move into the desktop app for offline
-            study, read-aloud, AI commentary, and deeper workflows. Keep the free core meaningful. Charge for
-            convenience, setup removal, and richer output.
+            Start instantly in the web reader, then move into the full app for offline study, read-aloud, AI
+            commentary, and a richer desk for long sessions in Scripture.
           </p>
 
           <div class="mt-8 flex flex-wrap gap-4">
-            <a href="/try" class="cta-primary">Try web version</a>
+            <a href="/try" class="cta-primary">Open web reader</a>
             <a href="/download" class="cta-secondary">Download app</a>
-            <a href="/pricing" class="cta-secondary">View pricing</a>
+            <a href="https://docs.logos-ai.online" target="_blank" rel="noreferrer" class="cta-secondary">Read docs</a>
           </div>
 
           <div class="mt-10 flex flex-wrap gap-3 text-sm">
-            <span class="rounded-full border border-gold/30 bg-gold/10 px-4 py-2 text-gold">Free core</span>
-            <span class="rounded-full border border-accent/30 bg-accent/10 px-4 py-2 text-accent">BYOK ready</span>
-            <span class="rounded-full border border-border bg-white/5 px-4 py-2 text-muted">Managed upgrade path</span>
+            <span class="rounded-full border border-gold/30 bg-gold/10 px-4 py-2 text-gold">Live Bible data</span>
+            <span class="rounded-full border border-accent/30 bg-accent/10 px-4 py-2 text-accent">Desktop + CLI + TUI</span>
+            <span class="rounded-full border border-border bg-white/5 px-4 py-2 text-muted">Offline-friendly</span>
           </div>
         </div>
 
@@ -39,55 +38,56 @@ import SiteLayout from "../layouts/SiteLayout.astro";
             <div class="rounded-[1.7rem] border border-border/80 bg-bg/60 p-4">
               <div class="mb-4 flex items-center justify-between">
                 <div>
-                  <div class="text-xs uppercase tracking-[0.22em] text-muted">Try It Now</div>
-                  <div class="mt-1 font-display text-3xl text-text">Web Reader</div>
+                  <div class="text-xs uppercase tracking-[0.22em] text-muted">Browser Reader</div>
+                  <div class="mt-1 font-display text-3xl text-text">John 1</div>
                 </div>
-                <span class="rounded-full border border-gold/35 bg-gold/10 px-3 py-1 text-xs uppercase tracking-[0.2em] text-gold">
-                  Demo
+                <span class="rounded-full border border-accent/30 bg-accent/10 px-3 py-1 text-xs uppercase tracking-[0.2em] text-accent">
+                  Live
                 </span>
               </div>
 
               <div class="grid gap-4 lg:grid-cols-[220px_1fr]">
                 <div class="rounded-[1.4rem] border border-border bg-surface/70 p-4">
-                  <div class="text-xs uppercase tracking-[0.22em] text-muted">Library</div>
+                  <div class="text-xs uppercase tracking-[0.22em] text-muted">Translations</div>
                   <div class="mt-4 space-y-3">
                     <div class="rounded-2xl border border-gold/45 bg-highlight/70 px-4 py-3">
-                      <div class="font-display text-lg text-text">DEMO</div>
-                      <div class="mt-1 text-xs uppercase tracking-[0.18em] text-muted">Guided Web Demo</div>
+                      <div class="font-display text-lg text-text">KJV</div>
+                      <div class="mt-1 text-xs uppercase tracking-[0.18em] text-muted">Selected</div>
                     </div>
-                    <div class="rounded-2xl border border-border bg-bg/45 px-4 py-3 text-sm text-text">Genesis</div>
-                    <div class="rounded-2xl border border-border bg-bg/45 px-4 py-3 text-sm text-text">Psalms</div>
-                    <div class="rounded-2xl border border-border bg-bg/45 px-4 py-3 text-sm text-text">John</div>
+                    <div class="rounded-2xl border border-border bg-bg/45 px-4 py-3 text-sm text-text">BSB</div>
+                    <div class="rounded-2xl border border-border bg-bg/45 px-4 py-3 text-sm text-text">WEB</div>
+                    <div class="rounded-2xl border border-border bg-bg/45 px-4 py-3 text-sm text-text">LSB</div>
                   </div>
                 </div>
 
                 <div class="rounded-[1.4rem] border border-border bg-surface/70 p-5">
                   <div class="mb-4 flex items-center justify-between">
                     <div>
-                      <div class="text-xs uppercase tracking-[0.22em] text-muted">Reader</div>
-                      <div class="mt-1 font-display text-2xl text-text">Psalm 23</div>
+                      <div class="text-xs uppercase tracking-[0.22em] text-muted">Reading Desk</div>
+                      <div class="mt-1 font-display text-2xl text-text">Search and navigation</div>
                     </div>
-                    <span class="rounded-full border border-accent/30 bg-accent/10 px-3 py-1 text-xs uppercase tracking-[0.2em] text-accent">
-                      Search
+                    <span class="rounded-full border border-gold/35 bg-gold/10 px-3 py-1 text-xs uppercase tracking-[0.2em] text-gold">
+                      Scripture
                     </span>
                   </div>
                   <p class="font-serif text-lg leading-8 text-text">
                     <span class="mr-1 text-xs font-semibold uppercase tracking-[0.2em] text-gold">1</span>
-                    The Lord is my shepherd; I shall not want. <span class="ml-2 mr-1 text-xs font-semibold uppercase tracking-[0.2em] text-gold">2</span>
-                    He makes me lie down in green pastures.
+                    In the beginning was the Word, and the Word was with God, and the Word was God.
+                    <span class="ml-2 mr-1 text-xs font-semibold uppercase tracking-[0.2em] text-gold">2</span>
+                    The same was in the beginning with God.
                   </p>
                   <div class="mt-6 grid gap-3 md:grid-cols-3">
                     <div class="rounded-2xl border border-border bg-bg/45 px-4 py-3">
-                      <div class="text-xs uppercase tracking-[0.18em] text-muted">No AI</div>
-                      <div class="mt-2 text-sm text-text">Just reading and search in the browser.</div>
+                      <div class="text-xs uppercase tracking-[0.18em] text-muted">Read</div>
+                      <div class="mt-2 text-sm text-text">Open a real translation and jump chapter to chapter quickly.</div>
                     </div>
                     <div class="rounded-2xl border border-border bg-bg/45 px-4 py-3">
-                      <div class="text-xs uppercase tracking-[0.18em] text-muted">Desktop depth</div>
-                      <div class="mt-2 text-sm text-text">Voices, AI commentary, offline, and exports in the app.</div>
+                      <div class="text-xs uppercase tracking-[0.18em] text-muted">Search</div>
+                      <div class="mt-2 text-sm text-text">Find verses by phrase, theme, or reference in seconds.</div>
                     </div>
                     <div class="rounded-2xl border border-border bg-bg/45 px-4 py-3">
-                      <div class="text-xs uppercase tracking-[0.18em] text-muted">Upgrade path</div>
-                      <div class="mt-2 text-sm text-text">Managed AI later when convenience becomes worth paying for.</div>
+                      <div class="text-xs uppercase tracking-[0.18em] text-muted">Continue</div>
+                      <div class="mt-2 text-sm text-text">Move into the full app when you want offline, audio, and deeper study tools.</div>
                     </div>
                   </div>
                 </div>
@@ -100,39 +100,72 @@ import SiteLayout from "../layouts/SiteLayout.astro";
       <section class="shell py-14">
         <div class="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
           <article class="surface-card p-6">
-            <p class="eyebrow">Bible reading</p>
-            <h2 class="mt-3 font-display text-3xl text-text">Immediate value</h2>
+            <p class="eyebrow">Reading</p>
+            <h2 class="mt-3 font-display text-3xl text-text">Open Scripture fast</h2>
             <p class="mt-4 text-sm leading-7 text-muted">
-              The free tier is still good enough to recommend. Reading, passage search, and lightweight discovery happen
-              before money enters the conversation.
+              Browse translations, books, and chapters in a reader designed to keep you moving instead of burying you
+              in tabs.
             </p>
           </article>
 
           <article class="surface-card p-6">
-            <p class="eyebrow">Optional AI</p>
-            <h2 class="mt-3 font-display text-3xl text-text">Convenience pays</h2>
+            <p class="eyebrow">Search</p>
+            <h2 class="mt-3 font-display text-3xl text-text">Find passages quickly</h2>
             <p class="mt-4 text-sm leading-7 text-muted">
-              BYOK covers power users. Managed AI removes setup friction. Packs and subscriptions accelerate work
-              without holding the core experience hostage.
+              Search by phrase or keyword, jump straight into a result, and stay in the same reading desk while you
+              explore.
             </p>
           </article>
 
           <article class="surface-card p-6">
-            <p class="eyebrow">Desktop app</p>
-            <h2 class="mt-3 font-display text-3xl text-text">Richer tooling</h2>
+            <p class="eyebrow">Desktop</p>
+            <h2 class="mt-3 font-display text-3xl text-text">Go deeper in the app</h2>
             <p class="mt-4 text-sm leading-7 text-muted">
-              The downloadable app stays the primary product for offline study, voices, AI commentary, and future
-              sermon-prep or church workflows.
+              The full download adds offline workflows, read-aloud, AI commentary, exports, and a richer environment
+              for longer study sessions.
             </p>
           </article>
 
           <article class="surface-card p-6">
-            <p class="eyebrow">Trust</p>
-            <h2 class="mt-3 font-display text-3xl text-text">Privacy matters</h2>
+            <p class="eyebrow">Privacy</p>
+            <h2 class="mt-3 font-display text-3xl text-text">Use the setup you want</h2>
             <p class="mt-4 text-sm leading-7 text-muted">
-              Lead with usefulness, offline capability, and user control. Let pricing read as a convenience upgrade,
-              not a plea about infrastructure cost.
+              Use the hosted experience, bring your own API key, or stay local where the workflow supports it.
             </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="shell py-14">
+        <div class="grid gap-6 lg:grid-cols-3">
+          <article class="surface-card p-8">
+            <p class="eyebrow">Browser</p>
+            <h2 class="mt-3 section-title">Start instantly.</h2>
+            <p class="mt-5 text-base leading-8 text-muted">
+              The web reader is the quickest way into Scripture. Open a translation, search a passage, and get moving
+              without installing anything first.
+            </p>
+            <a href="/try" class="mt-8 inline-flex cta-primary">Launch reader</a>
+          </article>
+
+          <article class="surface-card p-8">
+            <p class="eyebrow">Desktop</p>
+            <h2 class="mt-3 section-title">Study longer.</h2>
+            <p class="mt-5 text-base leading-8 text-muted">
+              Install the full app when you want offline access, audio, AI help, and a workspace that feels like a
+              dedicated study desk instead of a browser tab.
+            </p>
+            <a href="/download" class="mt-8 inline-flex cta-secondary">See downloads</a>
+          </article>
+
+          <article class="surface-card p-8">
+            <p class="eyebrow">Terminal</p>
+            <h2 class="mt-3 section-title">Work your way.</h2>
+            <p class="mt-5 text-base leading-8 text-muted">
+              Logos AI also ships with CLI and TUI surfaces for users who want keyboard-first reading, scripting, or a
+              minimal workflow.
+            </p>
+            <a href="https://docs.logos-ai.online" target="_blank" rel="noreferrer" class="mt-8 inline-flex cta-secondary">Read setup docs</a>
           </article>
         </div>
       </section>
@@ -140,46 +173,50 @@ import SiteLayout from "../layouts/SiteLayout.astro";
       <section class="shell py-14">
         <div class="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
           <div class="surface-card p-8">
-            <p class="eyebrow">Website Funnel</p>
-            <h2 class="mt-3 section-title">The browser is the on-ramp, not the whole product.</h2>
+            <p class="eyebrow">Built for Study</p>
+            <h2 class="mt-3 section-title">Keep the text of Scripture central.</h2>
             <p class="mt-5 section-copy">
-              Let visitors feel value quickly in the web demo, then route them toward the richer desktop app and the
-              later managed plans. The site should act as explanation layer, proof layer, download funnel, and upgrade
-              funnel all at once.
+              Logos AI is designed to make opening, reading, searching, and continuing your study session feel fast and
+              natural across browser, desktop, and terminal surfaces.
             </p>
-            <div class="mt-8 grid gap-4 md:grid-cols-3">
+            <div class="mt-8 grid gap-4 md:grid-cols-2">
               <div class="rounded-[1.6rem] border border-border bg-bg/45 p-5">
-                <div class="text-xs uppercase tracking-[0.18em] text-muted">Top</div>
-                <div class="mt-3 text-2xl font-display text-text">Discover</div>
-                <p class="mt-3 text-sm leading-7 text-muted">Landing page, blog posts, clips, and community shares.</p>
+                <div class="text-xs uppercase tracking-[0.18em] text-muted">Real translations</div>
+                <p class="mt-3 text-sm leading-7 text-text">Use live Bible data in the browser instead of a fake marketing mockup.</p>
               </div>
               <div class="rounded-[1.6rem] border border-border bg-bg/45 p-5">
-                <div class="text-xs uppercase tracking-[0.18em] text-muted">Middle</div>
-                <div class="mt-3 text-2xl font-display text-text">Try</div>
-                <p class="mt-3 text-sm leading-7 text-muted">Interactive reader, screenshots, and clear free versus paid positioning.</p>
+                <div class="text-xs uppercase tracking-[0.18em] text-muted">Offline-friendly</div>
+                <p class="mt-3 text-sm leading-7 text-text">Move into the desktop app when you want a stronger offline reading and study flow.</p>
               </div>
               <div class="rounded-[1.6rem] border border-border bg-bg/45 p-5">
-                <div class="text-xs uppercase tracking-[0.18em] text-muted">Bottom</div>
-                <div class="mt-3 text-2xl font-display text-text">Upgrade</div>
-                <p class="mt-3 text-sm leading-7 text-muted">Managed access, premium voices, sermon tools, and cloud conveniences.</p>
+                <div class="text-xs uppercase tracking-[0.18em] text-muted">Audio and AI</div>
+                <p class="mt-3 text-sm leading-7 text-text">Use the browser for reading. Use the full app when you want read-aloud and AI commentary.</p>
+              </div>
+              <div class="rounded-[1.6rem] border border-border bg-bg/45 p-5">
+                <div class="text-xs uppercase tracking-[0.18em] text-muted">Flexible setup</div>
+                <p class="mt-3 text-sm leading-7 text-text">Hosted access, your own API setup, and local workflows can all fit the same reading and study experience.</p>
               </div>
             </div>
           </div>
 
           <div class="surface-card p-8">
-            <p class="eyebrow">Audience Segments</p>
+            <p class="eyebrow">FAQ</p>
             <div class="mt-5 space-y-4">
-              <div class="rounded-[1.6rem] border border-border bg-bg/45 p-5">
-                <div class="text-lg font-semibold text-text">Everyday Bible users</div>
-                <p class="mt-2 text-sm leading-7 text-muted">Read, listen, and explore Scripture with AI help.</p>
+              <div>
+                <h3 class="text-lg font-semibold text-text">Does the browser reader use real Bible data?</h3>
+                <p class="mt-2 text-sm leading-7 text-muted">Yes. When the public API is configured, the reader uses live API.Bible content in the browser.</p>
               </div>
-              <div class="rounded-[1.6rem] border border-border bg-bg/45 p-5">
-                <div class="text-lg font-semibold text-text">Pastors and church leaders</div>
-                <p class="mt-2 text-sm leading-7 text-muted">Go from passage to study outline faster.</p>
+              <div>
+                <h3 class="text-lg font-semibold text-text">Do I need to install anything first?</h3>
+                <p class="mt-2 text-sm leading-7 text-muted">No. The web reader is the fastest way to try Logos AI. The desktop app is there when you want the fuller experience.</p>
               </div>
-              <div class="rounded-[1.6rem] border border-border bg-bg/45 p-5">
-                <div class="text-lg font-semibold text-text">Christian tech and power users</div>
-                <p class="mt-2 text-sm leading-7 text-muted">A flexible Bible AI app for technical users who want control.</p>
+              <div>
+                <h3 class="text-lg font-semibold text-text">Does the app work offline?</h3>
+                <p class="mt-2 text-sm leading-7 text-muted">The desktop app is the main offline-friendly workflow. The browser reader is aimed at quick access and discovery.</p>
+              </div>
+              <div>
+                <h3 class="text-lg font-semibold text-text">Is AI required to use it?</h3>
+                <p class="mt-2 text-sm leading-7 text-muted">No. You can read and search Scripture without AI. AI features are optional and live in the richer app workflows.</p>
               </div>
             </div>
           </div>
@@ -190,67 +227,17 @@ import SiteLayout from "../layouts/SiteLayout.astro";
         <div class="surface-card p-8">
           <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
             <div>
-              <p class="eyebrow">Pricing Paths</p>
-              <h2 class="mt-3 section-title">Keep it simple early.</h2>
+              <p class="eyebrow">Download</p>
+              <h2 class="mt-3 section-title">Open Scripture here. Go deeper in the full app.</h2>
               <p class="mt-5 section-copy">
-                Free gets adoption. BYOK handles zero-cost power users. Managed access becomes the main monetization
-                lane once setup removal and reliability are worth paying for.
+                Use the browser to start immediately, then install the complete Logos AI app for offline reading,
+                read-aloud, AI commentary, and a stronger long-form study environment.
               </p>
             </div>
 
-            <a href="/pricing" class="cta-secondary">Full pricing page</a>
-          </div>
-
-          <div class="mt-8 grid gap-5 lg:grid-cols-3">
-            <div class="rounded-[1.8rem] border border-border bg-bg/45 p-6">
-              <div class="text-sm uppercase tracking-[0.22em] text-muted">Free</div>
-              <div class="mt-3 font-display text-4xl text-text">$0</div>
-              <p class="mt-4 text-sm leading-7 text-muted">Browser demo, app download, basic study, and enough value to build trust.</p>
-            </div>
-            <div class="rounded-[1.8rem] border border-accent/40 bg-accent/5 p-6">
-              <div class="text-sm uppercase tracking-[0.22em] text-accent">Bring your own key</div>
-              <div class="mt-3 font-display text-4xl text-text">Flexible</div>
-              <p class="mt-4 text-sm leading-7 text-muted">Technical users keep full control without needing Logos AI to absorb every token cost.</p>
-            </div>
-            <div class="rounded-[1.8rem] border border-gold/40 bg-gold/5 p-6">
-              <div class="text-sm uppercase tracking-[0.22em] text-gold">Managed</div>
-              <div class="mt-3 font-display text-4xl text-text">$5-$15</div>
-              <p class="mt-4 text-sm leading-7 text-muted">No setup, hosted AI, premium voices, saved history, and priority usage.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="shell py-14">
-        <div class="grid gap-5 lg:grid-cols-2">
-          <div class="surface-card p-8">
-            <p class="eyebrow">Download</p>
-            <h2 class="mt-3 section-title">The full app is where the richer workflows live.</h2>
-            <p class="mt-5 section-copy">
-              Download the desktop app for read-aloud, offline-friendly study, AI commentary, and more advanced study
-              flows than the browser should try to carry.
-            </p>
-            <div class="mt-8 flex flex-wrap gap-4">
+            <div class="flex flex-wrap gap-4">
               <a href="/download" class="cta-primary">Open downloads</a>
-              <a href="https://docs.logos-ai.online" target="_blank" rel="noreferrer" class="cta-secondary">Read setup docs</a>
-            </div>
-          </div>
-
-          <div class="surface-card p-8">
-            <p class="eyebrow">FAQ</p>
-            <div class="mt-5 space-y-4">
-              <div>
-                <h3 class="text-lg font-semibold text-text">Why is some AI paid?</h3>
-                <p class="mt-2 text-sm leading-7 text-muted">The free core stays useful, while managed AI removes setup and bundles convenience.</p>
-              </div>
-              <div>
-                <h3 class="text-lg font-semibold text-text">Can I use my own API key?</h3>
-                <p class="mt-2 text-sm leading-7 text-muted">Yes. BYOK is the control-first option for technical users and the zero-cost power-user path.</p>
-              </div>
-              <div>
-                <h3 class="text-lg font-semibold text-text">Does it work offline?</h3>
-                <p class="mt-2 text-sm leading-7 text-muted">The desktop app is the main offline-friendly experience. The browser is optimized for discovery and lighter use.</p>
-              </div>
+              <a href="/try" class="cta-secondary">Open web reader</a>
             </div>
           </div>
         </div>
