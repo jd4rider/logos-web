@@ -18,6 +18,56 @@ import SiteLayout from "../layouts/SiteLayout.astro";
         </p>
       </section>
 
+      <section class="mt-10 grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
+        <div class="surface-card p-8">
+          <p class="eyebrow">Quick Install</p>
+          <h2 class="mt-3 font-display text-4xl text-text">Use the path that fits the user.</h2>
+          <p class="mt-4 text-sm leading-7 text-muted">
+            Native installers are for normal users. Brew, Scoop, and the shell bundle are ready for power users, CI,
+            and keyboard-first setups.
+          </p>
+          <div class="mt-6 flex flex-wrap gap-4">
+            <a href="https://github.com/jd4rider/logos-releases/releases/tag/v0.1.4" target="_blank" rel="noreferrer" class="cta-primary">
+              Open release
+            </a>
+            <a href="https://docs.logos-ai.online/getting-started/desktop-install/" target="_blank" rel="noreferrer" class="cta-secondary">
+              Install docs
+            </a>
+            <a href="https://docs.logos-ai.online/setup/voices/" target="_blank" rel="noreferrer" class="cta-secondary">
+              Kokoro setup
+            </a>
+          </div>
+        </div>
+
+        <div class="surface-card p-8">
+          <p class="eyebrow">Command Paths</p>
+          <div class="mt-4 space-y-5 text-sm leading-7 text-muted">
+            <div>
+              <p class="text-xs uppercase tracking-[0.22em] text-text">Homebrew</p>
+              <code class="mt-2 block overflow-x-auto rounded-2xl border border-border/70 bg-bg/70 px-4 py-3 text-xs text-gold">
+                brew tap jd4rider/logos-ai https://github.com/jd4rider/homebrew-logos-ai
+                <br />
+                brew install --cask logos-ai
+              </code>
+            </div>
+            <div>
+              <p class="text-xs uppercase tracking-[0.22em] text-text">Scoop</p>
+              <code class="mt-2 block overflow-x-auto rounded-2xl border border-border/70 bg-bg/70 px-4 py-3 text-xs text-gold">
+                scoop bucket add logos-ai https://github.com/jd4rider/scoop-logos-ai
+                <br />
+                scoop install logos-ai
+              </code>
+            </div>
+            <div>
+              <p class="text-xs uppercase tracking-[0.22em] text-text">Shell Install</p>
+              <code class="mt-2 block overflow-x-auto rounded-2xl border border-border/70 bg-bg/70 px-4 py-3 text-xs text-gold">
+                curl -fsSL https://raw.githubusercontent.com/jd4rider/logos-releases/main/install.sh | bash
+              </code>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section class="mt-10 grid gap-6 lg:grid-cols-3">
         <article class="surface-card p-8">
           <p class="eyebrow">macOS</p>
@@ -62,36 +112,24 @@ import SiteLayout from "../layouts/SiteLayout.astro";
           <ul class="mt-5 space-y-4 text-sm leading-7 text-muted">
             <li>Offline-friendly reading and imported local translations</li>
             <li>AI commentary and study help where configured</li>
-            <li>Read-aloud workflows and premium voices later</li>
+            <li>Read-aloud with Kokoro, Piper, or system fallback voices</li>
             <li>Future sermon prep, exports, sync, and team features</li>
           </ul>
         </div>
 
         <div class="surface-card p-8">
-          <p class="eyebrow">Power Users</p>
-          <div class="mt-4 space-y-5 text-sm leading-7 text-muted">
-            <div>
-              <p class="text-xs uppercase tracking-[0.22em] text-text">Homebrew</p>
-              <code class="mt-2 block overflow-x-auto rounded-2xl border border-border/70 bg-bg/70 px-4 py-3 text-xs text-gold">
-                brew tap jd4rider/logos-ai https://github.com/jd4rider/homebrew-logos-ai
-                <br />
-                brew install --cask logos-ai
-              </code>
-            </div>
-            <div>
-              <p class="text-xs uppercase tracking-[0.22em] text-text">Scoop</p>
-              <code class="mt-2 block overflow-x-auto rounded-2xl border border-border/70 bg-bg/70 px-4 py-3 text-xs text-gold">
-                scoop bucket add logos-ai https://github.com/jd4rider/scoop-logos-ai
-                <br />
-                scoop install logos-ai
-              </code>
-            </div>
-            <div>
-              <p class="text-xs uppercase tracking-[0.22em] text-text">Shell Install</p>
-              <code class="mt-2 block overflow-x-auto rounded-2xl border border-border/70 bg-bg/70 px-4 py-3 text-xs text-gold">
-                curl -fsSL https://raw.githubusercontent.com/jd4rider/logos-releases/main/install.sh | bash
-              </code>
-            </div>
+          <p class="eyebrow">Read-Aloud Setup</p>
+          <p class="mt-4 text-sm leading-7 text-muted">
+            Kokoro is the recommended voice stack. Piper is still a solid local option. When neither is installed,
+            Windows and Linux now fall back to basic system speech automatically.
+          </p>
+          <div class="mt-6 flex flex-wrap gap-4">
+            <a href="https://docs.logos-ai.online/setup/voices/" target="_blank" rel="noreferrer" class="cta-secondary">
+              Open voice docs
+            </a>
+            <a href="https://docs.logos-ai.online/getting-started/desktop-install/" target="_blank" rel="noreferrer" class="cta-secondary">
+              Install guide
+            </a>
           </div>
         </div>
       </section>

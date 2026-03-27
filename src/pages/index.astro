@@ -97,6 +97,56 @@ import SiteLayout from "../layouts/SiteLayout.astro";
         </div>
       </section>
 
+      <section class="shell py-10">
+        <div class="surface-card grid gap-6 p-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+          <div>
+            <p class="eyebrow">Install Fast</p>
+            <h2 class="mt-3 section-title">Use the installer you want.</h2>
+            <p class="mt-5 text-base leading-8 text-muted">
+              Normal users can grab the native installer from the release page. Power users can go straight to
+              Homebrew, Scoop, or the shell bundle without digging through docs first.
+            </p>
+            <div class="mt-6 flex flex-wrap gap-4">
+              <a
+                href="https://github.com/jd4rider/logos-releases/releases/tag/v0.1.4"
+                target="_blank"
+                rel="noreferrer"
+                class="cta-primary"
+              >
+                Open release
+              </a>
+              <a href="/download" class="cta-secondary">All download options</a>
+              <a href="https://docs.logos-ai.online/setup/voices/" target="_blank" rel="noreferrer" class="cta-secondary">
+                Kokoro setup
+              </a>
+            </div>
+          </div>
+
+          <div class="grid gap-4 md:grid-cols-3">
+            <div class="rounded-[1.5rem] border border-border bg-bg/45 p-4">
+              <div class="text-xs uppercase tracking-[0.18em] text-muted">Homebrew</div>
+              <code class="mt-3 block overflow-x-auto whitespace-pre-wrap text-xs leading-6 text-gold">
+                brew tap jd4rider/logos-ai https://github.com/jd4rider/homebrew-logos-ai
+                {"\n"}brew install --cask logos-ai
+              </code>
+            </div>
+            <div class="rounded-[1.5rem] border border-border bg-bg/45 p-4">
+              <div class="text-xs uppercase tracking-[0.18em] text-muted">Scoop</div>
+              <code class="mt-3 block overflow-x-auto whitespace-pre-wrap text-xs leading-6 text-gold">
+                scoop bucket add logos-ai https://github.com/jd4rider/scoop-logos-ai
+                {"\n"}scoop install logos-ai
+              </code>
+            </div>
+            <div class="rounded-[1.5rem] border border-border bg-bg/45 p-4">
+              <div class="text-xs uppercase tracking-[0.18em] text-muted">Shell Bundle</div>
+              <code class="mt-3 block overflow-x-auto whitespace-pre-wrap text-xs leading-6 text-gold">
+                curl -fsSL https://raw.githubusercontent.com/jd4rider/logos-releases/main/install.sh | bash
+              </code>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section class="shell py-14">
         <div class="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
           <article class="surface-card p-6">
@@ -155,7 +205,12 @@ import SiteLayout from "../layouts/SiteLayout.astro";
               Install the full app when you want offline access, audio, AI help, and a workspace that feels like a
               dedicated study desk instead of a browser tab.
             </p>
-            <a href="/download" class="mt-8 inline-flex cta-secondary">See downloads</a>
+            <div class="mt-8 flex flex-wrap gap-3">
+              <a href="/download" class="inline-flex cta-secondary">See downloads</a>
+              <a href="https://docs.logos-ai.online/setup/voices/" target="_blank" rel="noreferrer" class="inline-flex cta-secondary">
+                Voice setup
+              </a>
+            </div>
           </article>
 
           <article class="surface-card p-8">
