@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { demoBible, getDemoBibles, getDemoBooks, getDemoChapter, getDemoChapters, searchDemoLibrary } from "../../data/demoLibrary";
 import { languageLabel, languageOptions } from "../../lib/bibleMeta";
 import { hasLiveApi, liveApi } from "../../lib/liveApi";
@@ -6,6 +6,9 @@ import type { BibleSummary, Book, Chapter, ChapterContent, SearchData } from "..
 import ReaderPane from "./ReaderPane";
 import SearchPanel from "./SearchPanel";
 import Sidebar from "./Sidebar";
+
+const maxParallelColumns = 3;
+const comparisonSlotCount = maxParallelColumns - 1;
 
 function explainError(error: unknown): string {
   if (error instanceof Error) {
@@ -48,6 +51,60 @@ function preferredChapter(bookId: string, chapters: Chapter[]) {
   return chapters.find((chapter) => chapter.number === "1") ?? chapters[0] ?? null;
 }
 
+function normalizeBookKey(value: string) {
+  return value.toLowerCase().replace(/[^a-z0-9]/g, "");
+}
+
+function matchesBook(candidate: Book, target: Book) {
+  const candidateKeys = [
+    normalizeBookKey(candidate.abbreviation),
+    normalizeBookKey(candidate.name),
+    normalizeBookKey(candidate.nameLong),
+  ];
+  const targetKeys = [
+    normalizeBookKey(target.abbreviation),
+    normalizeBookKey(target.name),
+    normalizeBookKey(target.nameLong),
+  ];
+
+  return targetKeys.some((key) => candidateKeys.includes(key));
+}
+
+function sameSelections(left: string[], right: string[]) {
+  return left.length === right.length && left.every((value, index) => value === right[index]);
+}
+
+function normalizeComparisonSelections(primaryBibleId: string | undefined, bibles: BibleSummary[], current: string[]) {
+  const available = bibles.filter((bible) => bible.id !== primaryBibleId);
+  const used = new Set<string>();
+
+  return Array.from({ length: comparisonSlotCount }, (_, slot) => {
+    const preserved = current[slot];
+    if (preserved && available.some((bible) => bible.id === preserved) && !used.has(preserved)) {
+      used.add(preserved);
+      return preserved;
+    }
+
+    const fallback = available.find((bible) => !used.has(bible.id));
+    if (!fallback) {
+      return "";
+    }
+
+    used.add(fallback.id);
+    return fallback.id;
+  });
+}
+
+function comparisonGridClass(columnCount: number) {
+  if (columnCount <= 1) {
+    return "";
+  }
+  if (columnCount === 2) {
+    return "xl:grid-cols-2";
+  }
+  return "xl:grid-cols-2 2xl:grid-cols-3";
+}
+
 export default function LogosReaderApp() {
   const liveAvailable = hasLiveApi();
   const [mode, setMode] = useState<"demo" | "live">(liveAvailable ? "live" : "demo");
@@ -62,6 +119,13 @@ export default function LogosReaderApp() {
   const [busyLabel, setBusyLabel] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [selectedLanguage, setSelectedLanguage] = useState("eng");
+  const [parallelColumnCount, setParallelColumnCount] = useState(1);
+  const [comparisonBibleIds, setComparisonBibleIds] = useState<string[]>(["", ""]);
+  const [comparisonChapters, setComparisonChapters] = useState<(ChapterContent | null)[]>([null, null]);
+  const [comparisonBusy, setComparisonBusy] = useState<boolean[]>([false, false]);
+  const [comparisonErrors, setComparisonErrors] = useState<(string | null)[]>([null, null]);
+  const comparisonBooksRef = useRef<Record<string, Book[]>>({});
+  const comparisonChaptersRef = useRef<Record<string, Chapter[]>>({});
 
   useEffect(() => {
     let cancelled = false;
@@ -76,6 +140,9 @@ export default function LogosReaderApp() {
       setSearchOpen(false);
       setBooks([]);
       setChapters([]);
+      setComparisonChapters([null, null]);
+      setComparisonBusy([false, false]);
+      setComparisonErrors([null, null]);
 
       try {
         const nextBibles = mode === "live" ? await liveApi.getBibles(selectedLanguage) : getDemoBibles();
@@ -114,10 +181,11 @@ export default function LogosReaderApp() {
           return;
         }
 
-        const content = mode === "live" ? await liveApi.getChapter(bible.id, chapter.id) : getDemoChapter(chapter.id);
-        if (!cancelled) {
-          setCurrentChapter(content);
-        }
+      const content = mode === "live" ? await liveApi.getChapter(bible.id, chapter.id) : getDemoChapter(chapter.id);
+      if (!cancelled) {
+        setCurrentChapter(content);
+        setComparisonBusy([false, false]);
+      }
       } catch (loadError) {
         if (!cancelled) {
           setError(explainError(loadError));
@@ -139,6 +207,114 @@ export default function LogosReaderApp() {
     };
   }, [mode, selectedLanguage]);
 
+  useEffect(() => {
+    const maxColumns = Math.min(maxParallelColumns, Math.max(1, bibles.length));
+    setParallelColumnCount((current) => Math.min(current, maxColumns));
+  }, [bibles.length]);
+
+  useEffect(() => {
+    setComparisonBibleIds((current) => {
+      const next = normalizeComparisonSelections(currentBible?.id, bibles, current);
+      return sameSelections(current, next) ? current : next;
+    });
+  }, [bibles, currentBible?.id]);
+
+  useEffect(() => {
+    const visibleSlots = Math.max(0, parallelColumnCount - 1);
+    if (!currentBible || !currentBook || !currentChapter || visibleSlots === 0) {
+      setComparisonBusy([false, false]);
+      setComparisonChapters([null, null]);
+      setComparisonErrors([null, null]);
+      return;
+    }
+
+    let cancelled = false;
+    const seen = new Set<string>();
+    const referenceBook = currentBook;
+    const referenceChapter = currentChapter;
+
+    for (let slot = 0; slot < comparisonSlotCount; slot += 1) {
+      if (slot >= visibleSlots) {
+        setComparisonBusy((current) => current.map((value, index) => (index === slot ? false : value)));
+        setComparisonChapters((current) => current.map((value, index) => (index === slot ? null : value)));
+        setComparisonErrors((current) => current.map((value, index) => (index === slot ? null : value)));
+        continue;
+      }
+
+      const bibleId = comparisonBibleIds[slot];
+      if (!bibleId) {
+        setComparisonBusy((current) => current.map((value, index) => (index === slot ? false : value)));
+        setComparisonChapters((current) => current.map((value, index) => (index === slot ? null : value)));
+        setComparisonErrors((current) =>
+          current.map((value, index) => (index === slot ? "Choose another translation to compare this chapter." : value)),
+        );
+        continue;
+      }
+
+      if (bibleId === currentBible.id || seen.has(bibleId)) {
+        setComparisonBusy((current) => current.map((value, index) => (index === slot ? false : value)));
+        setComparisonChapters((current) => current.map((value, index) => (index === slot ? null : value)));
+        setComparisonErrors((current) =>
+          current.map((value, index) => (index === slot ? "Choose a different comparison translation." : value)),
+        );
+        continue;
+      }
+
+      seen.add(bibleId);
+      setComparisonBusy((current) => current.map((value, index) => (index === slot ? true : value)));
+      setComparisonErrors((current) => current.map((value, index) => (index === slot ? null : value)));
+
+      void (async () => {
+        try {
+          let comparisonBooks = comparisonBooksRef.current[bibleId];
+          if (!comparisonBooks) {
+            comparisonBooks = mode === "live" ? await liveApi.getBooks(bibleId) : getDemoBooks();
+            comparisonBooksRef.current[bibleId] = comparisonBooks;
+          }
+
+          const matchingBook = comparisonBooks.find((candidate) => matchesBook(candidate, referenceBook));
+          if (!matchingBook) {
+            throw new Error(`Could not match ${referenceBook.name} in the comparison translation.`);
+          }
+
+          const chapterCacheKey = `${bibleId}:${matchingBook.id}`;
+          let comparisonChapterList = comparisonChaptersRef.current[chapterCacheKey];
+          if (!comparisonChapterList) {
+            comparisonChapterList =
+              mode === "live" ? await liveApi.getChapters(bibleId, matchingBook.id) : getDemoChapters(matchingBook.id);
+            comparisonChaptersRef.current[chapterCacheKey] = comparisonChapterList;
+          }
+
+          const matchingChapter = comparisonChapterList.find((chapter) => chapter.number === referenceChapter.number);
+          if (!matchingChapter) {
+            throw new Error(`Could not find chapter ${referenceChapter.number} in the comparison translation.`);
+          }
+
+          const nextChapter =
+            mode === "live" ? await liveApi.getChapter(bibleId, matchingChapter.id) : getDemoChapter(matchingChapter.id);
+          if (!cancelled) {
+            setComparisonChapters((current) => current.map((value, index) => (index === slot ? nextChapter : value)));
+          }
+        } catch (comparisonLoadError) {
+          if (!cancelled) {
+            setComparisonChapters((current) => current.map((value, index) => (index === slot ? null : value)));
+            setComparisonErrors((current) =>
+              current.map((value, index) => (index === slot ? explainError(comparisonLoadError) : value)),
+            );
+          }
+        } finally {
+          if (!cancelled) {
+            setComparisonBusy((current) => current.map((value, index) => (index === slot ? false : value)));
+          }
+        }
+      })();
+    }
+
+    return () => {
+      cancelled = true;
+    };
+  }, [mode, parallelColumnCount, comparisonBibleIds, currentBible?.id, currentBook?.id, currentChapter?.id]);
+
   async function selectBible(bible: BibleSummary) {
     setCurrentBible(bible);
     setCurrentBook(null);
@@ -146,6 +322,9 @@ export default function LogosReaderApp() {
     setSearchResults(null);
     setSearchOpen(false);
     setChapters([]);
+    setComparisonChapters([null, null]);
+    setComparisonBusy([false, false]);
+    setComparisonErrors([null, null]);
     setBusyLabel(`Loading ${bible.abbreviation}`);
 
     try {
@@ -162,6 +341,29 @@ export default function LogosReaderApp() {
     setSelectedLanguage(language);
   }
 
+  function handleParallelColumnChange(columnCount: number) {
+    const maxColumns = Math.min(maxParallelColumns, Math.max(1, bibles.length));
+    setParallelColumnCount(Math.max(1, Math.min(columnCount, maxColumns)));
+  }
+
+  function setComparisonBibleId(slot: number, bibleId: string) {
+    setComparisonBibleIds((current) => current.map((value, index) => (index === slot ? bibleId : value)));
+  }
+
+  function comparisonOptions(slot: number) {
+    const blocked = new Set<string>();
+    if (currentBible?.id) {
+      blocked.add(currentBible.id);
+    }
+    comparisonBibleIds.forEach((selectedId, index) => {
+      if (index !== slot && selectedId) {
+        blocked.add(selectedId);
+      }
+    });
+
+    return bibles.filter((bible) => bible.id === comparisonBibleIds[slot] || !blocked.has(bible.id));
+  }
+
   async function selectBook(book: Book) {
     if (!currentBible) {
       return;
@@ -170,6 +372,9 @@ export default function LogosReaderApp() {
     setCurrentBook(book);
     setCurrentChapter(null);
     setSearchOpen(false);
+    setComparisonChapters([null, null]);
+    setComparisonBusy([false, false]);
+    setComparisonErrors([null, null]);
     setBusyLabel(`Loading ${book.name}`);
 
     try {
@@ -200,6 +405,9 @@ export default function LogosReaderApp() {
 
       const content = mode === "live" ? await liveApi.getChapter(currentBible.id, chapterId) : getDemoChapter(chapterId);
       setCurrentChapter(content);
+      setComparisonChapters([null, null]);
+      setComparisonBusy([false, false]);
+      setComparisonErrors([null, null]);
 
       const selectedBook = books.find((book) => book.id === content.bookId);
       if (selectedBook) {
@@ -241,12 +449,18 @@ export default function LogosReaderApp() {
     }
     if (currentChapter) {
       setCurrentChapter(null);
+      setComparisonChapters([null, null]);
+      setComparisonBusy([false, false]);
+      setComparisonErrors([null, null]);
       return;
     }
     if (currentBook) {
       setCurrentBook(null);
       setCurrentChapter(null);
       setChapters([]);
+      setComparisonChapters([null, null]);
+      setComparisonBusy([false, false]);
+      setComparisonErrors([null, null]);
       return;
     }
     if (currentBible && mode === "live") {
@@ -256,7 +470,36 @@ export default function LogosReaderApp() {
       setSearchResults(null);
       setBooks([]);
       setChapters([]);
+      setComparisonChapters([null, null]);
+      setComparisonBusy([false, false]);
+      setComparisonErrors([null, null]);
     }
+  }
+
+  function renderComparisonPane(slot: number) {
+    if (comparisonBusy[slot]) {
+      return (
+        <div className="mx-auto flex h-full w-full items-center justify-center px-4 py-4">
+          <div className="w-full rounded-[2rem] border border-border/80 bg-surface/60 p-6 text-sm text-muted shadow-panel backdrop-blur-xl">
+            Loading comparison translation...
+          </div>
+        </div>
+      );
+    }
+
+    const chapter = comparisonChapters[slot];
+    if (chapter) {
+      const label = bibles.find((bible) => bible.id === comparisonBibleIds[slot])?.abbreviation ?? `Compare ${slot + 2}`;
+      return <ReaderPane chapter={chapter} readerLabel={label} compact />;
+    }
+
+    return (
+      <div className="mx-auto flex h-full w-full items-center justify-center px-4 py-4">
+        <div className="w-full rounded-[2rem] border border-border/80 bg-surface/60 p-6 text-sm text-muted shadow-panel backdrop-blur-xl">
+          {comparisonErrors[slot] ?? "Choose another translation to compare this chapter side by side."}
+        </div>
+      </div>
+    );
   }
 
   function renderMainPane() {
@@ -274,6 +517,27 @@ export default function LogosReaderApp() {
     }
 
     if (currentChapter) {
+      if (parallelColumnCount > 1) {
+        return (
+          <div className={`grid h-full min-h-0 gap-0 ${comparisonGridClass(parallelColumnCount)}`}>
+            <div className="min-h-0">
+              <ReaderPane
+                chapter={currentChapter}
+                readerLabel={currentBible?.abbreviation ?? "Primary"}
+                compact
+                onOpenChapter={loadChapter}
+              />
+            </div>
+
+            {Array.from({ length: parallelColumnCount - 1 }, (_, slot) => (
+              <div key={`comparison-pane-${slot}`} className="min-h-0">
+                {renderComparisonPane(slot)}
+              </div>
+            ))}
+          </div>
+        );
+      }
+
       return <ReaderPane chapter={currentChapter} onOpenChapter={loadChapter} />;
     }
 
@@ -326,6 +590,8 @@ export default function LogosReaderApp() {
     );
   }
 
+  const maxColumnsAvailable = Math.min(maxParallelColumns, Math.max(1, bibles.length));
+
   return (
     <div className="surface-card overflow-hidden rounded-none border-0 shadow-none">
       <div className="flex min-h-screen flex-col text-text">
@@ -374,7 +640,10 @@ export default function LogosReaderApp() {
                   Back
                 </button>
               )}
-              <a href="/" className="rounded-full border border-border bg-bg/50 px-4 py-2 text-sm text-text transition hover:border-gold/50 hover:text-gold">
+              <a
+                href="/"
+                className="rounded-full border border-border bg-bg/50 px-4 py-2 text-sm text-text transition hover:border-gold/50 hover:text-gold"
+              >
                 Home
               </a>
             </div>
@@ -392,7 +661,7 @@ export default function LogosReaderApp() {
           </div>
         )}
 
-        <div className="grid min-h-0 flex-1 lg:grid-cols-[320px_minmax(0,1fr)_300px]">
+        <div className="grid min-h-0 flex-1 lg:grid-cols-[320px_minmax(0,1fr)_320px]">
           <Sidebar
             bibles={bibles}
             books={books}
@@ -414,6 +683,77 @@ export default function LogosReaderApp() {
 
           <aside className="hidden min-h-0 overflow-y-auto border-l border-border/80 bg-surface/40 px-4 py-5 backdrop-blur-xl lg:block">
             <div className="space-y-5">
+              {currentChapter ? (
+                <section className="rounded-[1.75rem] border border-border/80 bg-bg/40 p-5 shadow-panel">
+                  <p className="mb-3 text-xs uppercase tracking-[0.24em] text-muted">Parallel Reading</p>
+                  <h3 className="font-display text-2xl text-text">Compare chapter by chapter</h3>
+                  <p className="mt-4 text-sm leading-7 text-muted">
+                    Keep the same book and chapter synced across two or three translations so differences stay visible
+                    while you read.
+                  </p>
+
+                  <div className="mt-4 grid grid-cols-3 gap-2">
+                    {[1, 2, 3].map((columnCount) => (
+                      <button
+                        key={`parallel-columns-${columnCount}`}
+                        type="button"
+                        disabled={columnCount > maxColumnsAvailable}
+                        onClick={() => handleParallelColumnChange(columnCount)}
+                        className={`rounded-2xl border px-3 py-2 text-sm transition ${
+                          parallelColumnCount === columnCount
+                            ? "border-gold bg-gold text-bg"
+                            : "border-border bg-highlight/70 text-text hover:border-gold/50 hover:text-gold disabled:cursor-not-allowed disabled:opacity-40"
+                        }`}
+                      >
+                        {columnCount === 1 ? "Single" : `${columnCount}-up`}
+                      </button>
+                    ))}
+                  </div>
+
+                  {maxColumnsAvailable === 1 ? (
+                    <div className="mt-4 rounded-[1.2rem] border border-border bg-surface/60 px-4 py-3 text-sm text-muted">
+                      Parallel reading needs at least two available translations in the current library.
+                    </div>
+                  ) : parallelColumnCount > 1 ? (
+                    <div className="mt-4 space-y-3">
+                      {Array.from({ length: parallelColumnCount - 1 }, (_, slot) => {
+                        const options = comparisonOptions(slot);
+                        return (
+                          <label key={`parallel-select-${slot}`} className="block">
+                            <span className="text-xs uppercase tracking-[0.18em] text-muted">
+                              {slot === 0 ? "Second translation" : "Third translation"}
+                            </span>
+                            <select
+                              value={comparisonBibleIds[slot]}
+                              onChange={(event) => setComparisonBibleId(slot, event.target.value)}
+                              className="mt-2 w-full rounded-[1.1rem] border border-border bg-surface/70 px-4 py-3 text-sm text-text focus:border-gold/50 focus:outline-none"
+                            >
+                              {options.map((bible) => (
+                                <option key={bible.id} value={bible.id}>
+                                  {bible.abbreviation} - {bible.name}
+                                </option>
+                              ))}
+                            </select>
+                          </label>
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    <div className="mt-4 rounded-[1.2rem] border border-border bg-surface/60 px-4 py-3 text-sm text-muted">
+                      Switch to 2-up or 3-up when you want to compare the same chapter side by side.
+                    </div>
+                  )}
+                </section>
+              ) : (
+                <section className="rounded-[1.75rem] border border-border/80 bg-bg/40 p-5 shadow-panel">
+                  <p className="mb-3 text-xs uppercase tracking-[0.24em] text-muted">Parallel Reading</p>
+                  <h3 className="font-display text-2xl text-text">Waiting for a chapter</h3>
+                  <p className="mt-4 text-sm leading-7 text-muted">
+                    Open a chapter and the reader will let you compare it in two or three translations side by side.
+                  </p>
+                </section>
+              )}
+
               <section className="rounded-[1.75rem] border border-border/80 bg-bg/40 p-5 shadow-panel">
                 <p className="mb-3 text-xs uppercase tracking-[0.24em] text-muted">Selection</p>
                 <div className="space-y-3">
@@ -443,15 +783,19 @@ export default function LogosReaderApp() {
                   </div>
                   <div className="rounded-[1.35rem] border border-border bg-surface/70 px-4 py-3">
                     <div className="text-xs uppercase tracking-[0.22em] text-muted">Language</div>
-                    <div className="mt-1 text-sm text-text">{mode === "demo" ? "English (fallback)" : languageLabel(selectedLanguage)}</div>
+                    <div className="mt-1 text-sm text-text">
+                      {mode === "demo" ? "English (fallback)" : languageLabel(selectedLanguage)}
+                    </div>
+                  </div>
+                  <div className="rounded-[1.35rem] border border-border bg-surface/70 px-4 py-3">
+                    <div className="text-xs uppercase tracking-[0.22em] text-muted">Reader Layout</div>
+                    <div className="mt-1 text-sm text-text">
+                      {parallelColumnCount === 1 ? "Single translation" : `${parallelColumnCount} synced columns`}
+                    </div>
                   </div>
                   <div className="rounded-[1.35rem] border border-border bg-surface/70 px-4 py-3">
                     <div className="text-xs uppercase tracking-[0.22em] text-muted">Activity</div>
                     <div className="mt-1 text-sm text-text">{busyLabel || "Ready"}</div>
-                  </div>
-                  <div className="rounded-[1.35rem] border border-border bg-surface/70 px-4 py-3">
-                    <div className="text-xs uppercase tracking-[0.22em] text-muted">Search</div>
-                    <div className="mt-1 text-sm text-text">Use the search button to jump to matching verses in the current translation.</div>
                   </div>
                 </div>
               </section>

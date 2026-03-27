@@ -3,6 +3,8 @@ import type { ChapterContent } from "../../lib/types";
 
 interface Props {
   chapter: ChapterContent;
+  readerLabel?: string;
+  compact?: boolean;
   onOpenChapter?: (chapterId: string, bookId: string) => void;
 }
 
@@ -89,19 +91,19 @@ function parseContent(content: string): ReactNode[] {
   });
 }
 
-export default function ReaderPane({ chapter, onOpenChapter }: Props) {
+export default function ReaderPane({ chapter, readerLabel, compact = false, onOpenChapter }: Props) {
   return (
-    <div className="mx-auto flex h-full w-full max-w-4xl flex-col overflow-y-auto px-7 py-8">
-      <div className="mb-6 rounded-[2rem] border border-border/80 bg-surface/70 p-6 shadow-panel backdrop-blur-xl">
+    <div className={`mx-auto flex h-full w-full flex-col overflow-y-auto ${compact ? "px-4 py-4" : "max-w-4xl px-7 py-8"}`}>
+      <div className={`rounded-[2rem] border border-border/80 bg-surface/70 shadow-panel backdrop-blur-xl ${compact ? "mb-4 p-5" : "mb-6 p-6"}`}>
         <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
           <div className="flex flex-wrap items-center gap-3">
             <span className="rounded-full border border-gold/40 bg-gold/10 px-3 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-gold">
-              Reader
+              {readerLabel ?? "Reader"}
             </span>
             <span className="text-xs uppercase tracking-[0.24em] text-muted">{chapter.verseCount} verses</span>
           </div>
           <div className="flex flex-wrap gap-2">
-            {chapter.previous && (
+            {onOpenChapter && chapter.previous && (
               <button
                 type="button"
                 onClick={() => onOpenChapter?.(chapter.previous!.id, chapter.previous!.bookId)}
@@ -110,7 +112,7 @@ export default function ReaderPane({ chapter, onOpenChapter }: Props) {
                 Previous
               </button>
             )}
-            {chapter.next && (
+            {onOpenChapter && chapter.next && (
               <button
                 type="button"
                 onClick={() => onOpenChapter?.(chapter.next!.id, chapter.next!.bookId)}
@@ -121,10 +123,14 @@ export default function ReaderPane({ chapter, onOpenChapter }: Props) {
             )}
           </div>
         </div>
-        <h1 className="font-display text-4xl text-text">{chapter.reference}</h1>
+        <h1 className={`font-display text-text ${compact ? "text-3xl" : "text-4xl"}`}>{chapter.reference}</h1>
       </div>
 
-      <article className="rounded-[2rem] border border-border/80 bg-surface/60 px-7 py-8 font-serif text-lg shadow-panel backdrop-blur-xl">
+      <article
+        className={`rounded-[2rem] border border-border/80 bg-surface/60 font-serif shadow-panel backdrop-blur-xl ${
+          compact ? "px-5 py-6 text-[0.98rem]" : "px-7 py-8 text-lg"
+        }`}
+      >
         {parseContent(chapter.content)}
         <p className="mt-10 border-t border-border/70 pt-5 font-sans text-xs uppercase tracking-[0.18em] text-muted">
           {chapter.copyright}
