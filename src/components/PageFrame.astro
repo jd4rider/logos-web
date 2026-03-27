@@ -1,6 +1,6 @@
 ---
 interface Props {
-  current?: "home" | "pricing" | "download" | "try";
+  current?: "home" | "pricing" | "download" | "try" | "support";
 }
 
 const { current = "home" } = Astro.props;
@@ -10,6 +10,7 @@ const links = [
   { href: "/try", label: "Try It Now", key: "try" },
   { href: "/pricing", label: "Pricing", key: "pricing" },
   { href: "/download", label: "Download", key: "download" },
+  { href: "/support", label: "Support", key: "support" },
   { href: "https://docs.logos-ai.online", label: "Docs", key: "docs" },
   { href: "https://blog.logos-ai.online", label: "Blog", key: "blog" },
 ];
@@ -82,6 +83,7 @@ const links = [
 
       <div class="flex max-w-3xl flex-col gap-3 text-sm text-muted md:items-end">
         <div class="flex flex-wrap gap-3">
+          <a href="/support" class="nav-link">Support Logos AI</a>
           <a href="/pricing" class="nav-link">Pricing</a>
           <a href="/download" class="nav-link">Download</a>
           <a href="https://docs.logos-ai.online" target="_blank" rel="noreferrer" class="nav-link">Docs</a>

@@ -1,0 +1,103 @@
+---
+import PageFrame from "../components/PageFrame.astro";
+import SiteLayout from "../layouts/SiteLayout.astro";
+---
+
+<SiteLayout
+  title="Support Logos AI"
+  description="Support Logos AI with GitHub Sponsors, Buy Me a Coffee, or paid setup help for installs, voices, Ollama, and API.Bible guidance."
+>
+  <PageFrame current="support">
+    <main class="shell py-16">
+      <section class="max-w-4xl animate-rise">
+        <p class="eyebrow">Support Logos AI</p>
+        <h1 class="mt-4 section-title">Back the project or let me handle the setup.</h1>
+        <p class="mt-6 section-copy">
+          If Logos AI is useful to you, the simplest ways to help are recurring support, one-time support, or a paid
+          setup plan. Self-serve docs stay open either way. Support goes toward development, releases, docs, and the
+          time it takes to keep the app improving across web, desktop, CLI, and TUI.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-4">
+          <a href="https://github.com/sponsors/jd4rider" target="_blank" rel="noreferrer" class="cta-primary">
+            Support on GitHub Sponsors
+          </a>
+          <a href="https://buymeacoffee.com/jd4rider" target="_blank" rel="noreferrer" class="cta-secondary">
+            Buy Me a Coffee
+          </a>
+          <a href="https://docs.logos-ai.online" target="_blank" rel="noreferrer" class="cta-secondary">
+            Read setup docs
+          </a>
+        </div>
+      </section>
+
+      <section class="mt-10 grid gap-6 lg:grid-cols-3">
+        <article class="surface-card p-8">
+          <p class="eyebrow">Recurring Support</p>
+          <h2 class="mt-3 font-display text-4xl text-text">GitHub Sponsors</h2>
+          <p class="mt-4 text-sm leading-7 text-muted">
+            Best fit for people who want to support the project long term, follow development in public, and back the
+            open-source side of Logos AI directly from GitHub.
+          </p>
+          <a href="https://github.com/sponsors/jd4rider" target="_blank" rel="noreferrer" class="mt-6 inline-flex cta-primary">
+            Open GitHub Sponsors
+          </a>
+        </article>
+
+        <article class="surface-card p-8">
+          <p class="eyebrow">One-Time Support</p>
+          <h2 class="mt-3 font-display text-4xl text-text">Buy Me a Coffee</h2>
+          <p class="mt-4 text-sm leading-7 text-muted">
+            Best fit for casual support, quick thank-you payments, and people who want the fastest way to chip in
+            without thinking about tiers or GitHub accounts.
+          </p>
+          <a href="https://buymeacoffee.com/jd4rider" target="_blank" rel="noreferrer" class="mt-6 inline-flex cta-secondary">
+            Open Buy Me a Coffee
+          </a>
+        </article>
+
+        <article class="surface-card p-8">
+          <p class="eyebrow">Paid Setup Help</p>
+          <h2 class="mt-3 font-display text-4xl text-text">Done-for-you guidance</h2>
+          <p class="mt-4 text-sm leading-7 text-muted">
+            If you want help getting the full environment working, I can handle install planning, voice setup,
+            Ollama, and guided API.Bible configuration as a paid service.
+          </p>
+          <div class="mt-6 flex flex-col gap-3 text-sm text-muted">
+            <a href="mailto:jd4rider@gmail.com" class="nav-link">Email: jd4rider@gmail.com</a>
+            <a href="tel:+14063967246" class="nav-link">Call or text: 406-396-7246</a>
+          </div>
+        </article>
+      </section>
+
+      <section class="mt-10 grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+        <div class="surface-card p-8">
+          <p class="eyebrow">What setup help can cover</p>
+          <h2 class="mt-3 font-display text-4xl text-text">From install to a working study desk.</h2>
+          <ul class="mt-5 space-y-4 text-sm leading-7 text-muted">
+            <li>Install the desktop app, CLI, or TUI on macOS, Windows, or Linux</li>
+            <li>Set up Ollama for local AI commentary and Logos Chat</li>
+            <li>Install Kokoro or Piper for better read-aloud voices</li>
+            <li>Guide API.Bible app creation and key placement</li>
+            <li>Help choose a simple path between free, BYOK, and future managed options</li>
+          </ul>
+        </div>
+
+        <div class="surface-card p-8">
+          <p class="eyebrow">Important Note</p>
+          <h2 class="mt-3 font-display text-4xl text-text">Support, not tax-deductible charity.</h2>
+          <p class="mt-4 text-sm leading-7 text-muted">
+            These support links are for backing development and setup work. They should be treated as support for the
+            project, not as tax-deductible charitable donations.
+          </p>
+          <div class="mt-6 flex flex-wrap gap-4">
+            <a href="/download" class="cta-secondary">Download app</a>
+            <a href="/pricing" class="cta-secondary">View product pricing</a>
+            <a href="https://docs.logos-ai.online/getting-started/desktop-install/" target="_blank" rel="noreferrer" class="cta-secondary">
+              Install docs
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+  </PageFrame>
+</SiteLayout>
