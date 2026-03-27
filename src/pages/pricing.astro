@@ -51,11 +51,12 @@ import SiteLayout from "../layouts/SiteLayout.astro";
           <p class="text-sm uppercase tracking-[0.22em] text-gold">Managed</p>
           <div class="mt-4 font-display text-5xl text-text">Simple plans</div>
           <p class="mt-5 text-sm leading-7 text-muted">
-            Let Logos AI handle the setup so you can open the app and start studying immediately.
+            Let Logos AI handle more of the setup so you can open the app and start studying immediately.
           </p>
           <ul class="mt-6 space-y-3 text-sm text-muted">
             <li>Hosted AI access</li>
             <li>No API key setup</li>
+            <li>Optional setup help and done-for-you onboarding</li>
             <li>Saved history and richer study tools</li>
             <li>Priority usage and premium convenience features</li>
           </ul>
@@ -73,11 +74,31 @@ import SiteLayout from "../layouts/SiteLayout.astro";
         </div>
 
         <div class="surface-card p-8">
-          <p class="eyebrow">Best With Desktop</p>
-          <h2 class="mt-3 font-display text-4xl text-text">The deeper workflow lives in the app.</h2>
+          <p class="eyebrow">Setup Help</p>
+          <h2 class="mt-3 font-display text-4xl text-text">Pay for convenience, not pressure.</h2>
           <p class="mt-4 text-sm leading-7 text-muted">
-            The web reader is the fastest way to start. The downloadable app is where Logos Chat, local AI, read-aloud,
-            offline-friendly study, and longer-form workflows make the most sense.
+            For people who do not want to wire up Ollama, Kokoro, Piper, or an API.Bible key alone, setup help can be
+            offered as a paid convenience layer. The self-serve docs stay available either way.
+          </p>
+        </div>
+      </section>
+
+      <section class="mt-10 grid gap-6 lg:grid-cols-2">
+        <div class="surface-card p-8">
+          <p class="eyebrow">API.Bible</p>
+          <h2 class="mt-3 font-display text-4xl text-text">User key now, managed key later.</h2>
+          <p class="mt-4 text-sm leading-7 text-muted">
+            Today, API.Bible setup is primarily a self-serve docs path or an optional paid setup-help workflow. A
+            future premium edition can move to a commercial managed key once that cost is part of the paid plan.
+          </p>
+        </div>
+
+        <div class="surface-card p-8">
+          <p class="eyebrow">Future Premium</p>
+          <h2 class="mt-3 font-display text-4xl text-text">A simpler bundle can come later.</h2>
+          <p class="mt-4 text-sm leading-7 text-muted">
+            The likely direction is a premium desktop add-on or bundle that automates more of the local environment on
+            supported systems, especially Ollama and voice setup, while keeping the free and BYOK paths intact.
           </p>
         </div>
       </section>
