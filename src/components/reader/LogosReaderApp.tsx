@@ -490,7 +490,7 @@ export default function LogosReaderApp() {
     const chapter = comparisonChapters[slot];
     if (chapter) {
       const label = bibles.find((bible) => bible.id === comparisonBibleIds[slot])?.abbreviation ?? `Compare ${slot + 2}`;
-      return <ReaderPane chapter={chapter} readerLabel={label} compact />;
+      return <ReaderPane chapter={chapter} readerLabel={label} compact sharedScroll />;
     }
 
     return (
@@ -519,21 +519,24 @@ export default function LogosReaderApp() {
     if (currentChapter) {
       if (parallelColumnCount > 1) {
         return (
-          <div className={`grid h-full min-h-0 gap-0 ${comparisonGridClass(parallelColumnCount)}`}>
-            <div className="min-h-0">
-              <ReaderPane
-                chapter={currentChapter}
-                readerLabel={currentBible?.abbreviation ?? "Primary"}
-                compact
-                onOpenChapter={loadChapter}
-              />
-            </div>
-
-            {Array.from({ length: parallelColumnCount - 1 }, (_, slot) => (
-              <div key={`comparison-pane-${slot}`} className="min-h-0">
-                {renderComparisonPane(slot)}
+          <div className="h-full overflow-y-auto">
+            <div className={`grid min-h-full items-start gap-0 ${comparisonGridClass(parallelColumnCount)}`}>
+              <div className="min-h-0">
+                <ReaderPane
+                  chapter={currentChapter}
+                  readerLabel={currentBible?.abbreviation ?? "Primary"}
+                  compact
+                  sharedScroll
+                  onOpenChapter={loadChapter}
+                />
               </div>
-            ))}
+
+              {Array.from({ length: parallelColumnCount - 1 }, (_, slot) => (
+                <div key={`comparison-pane-${slot}`} className="min-h-0">
+                  {renderComparisonPane(slot)}
+                </div>
+              ))}
+            </div>
           </div>
         );
       }
