@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import type { BibleSummary, Book, Chapter } from "../../lib/types";
+import type { LanguageOption } from "../../lib/bibleMeta";
 
 type Panel = "bibles" | "books" | "chapters";
 
@@ -8,9 +9,13 @@ interface Props {
   books: Book[];
   chapters: Chapter[];
   loading: boolean;
+  selectedLanguage: string;
+  languageOptions: LanguageOption[];
+  languageDisabled?: boolean;
   currentBibleId?: string;
   currentBookId?: string;
   currentChapterId?: string;
+  onLanguageChange: (language: string) => void;
   onSelectBible: (bible: BibleSummary) => void;
   onSelectBook: (book: Book) => void;
   onSelectChapter: (chapter: Chapter) => void;
@@ -56,9 +61,13 @@ export default function Sidebar({
   books,
   chapters,
   loading,
+  selectedLanguage,
+  languageOptions,
+  languageDisabled = false,
   currentBibleId,
   currentBookId,
   currentChapterId,
+  onLanguageChange,
   onSelectBible,
   onSelectBook,
   onSelectChapter,
@@ -116,6 +125,22 @@ export default function Sidebar({
 
           {expandedPanel === "bibles" || !currentBible ? (
             <div className="mt-3 space-y-2">
+              <label className="block px-2">
+                <span className="text-[0.68rem] uppercase tracking-[0.22em] text-muted">Language</span>
+                <select
+                  value={selectedLanguage}
+                  disabled={loading || languageDisabled}
+                  onChange={(event) => onLanguageChange(event.target.value)}
+                  className="mt-2 w-full rounded-[1rem] border border-border bg-bg/55 px-3 py-2 text-sm text-text outline-none transition focus:border-gold/45 disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {languageOptions.map((option) => (
+                    <option key={option.code || "all"} value={option.code}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
               <div className="flex flex-wrap gap-2 px-2">
                 <span className="rounded-full border border-gold/30 bg-gold/10 px-3 py-1 text-[0.62rem] uppercase tracking-[0.2em] text-gold">
                   {demoCount} demo

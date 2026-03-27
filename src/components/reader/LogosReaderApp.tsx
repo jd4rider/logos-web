@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { demoBible, getDemoBibles, getDemoBooks, getDemoChapter, getDemoChapters, searchDemoLibrary } from "../../data/demoLibrary";
+import { languageLabel, languageOptions } from "../../lib/bibleMeta";
 import { hasLiveApi, liveApi } from "../../lib/liveApi";
 import type { BibleSummary, Book, Chapter, ChapterContent, SearchData } from "../../lib/types";
 import ReaderPane from "./ReaderPane";
@@ -60,6 +61,7 @@ export default function LogosReaderApp() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [busyLabel, setBusyLabel] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [selectedLanguage, setSelectedLanguage] = useState("eng");
 
   useEffect(() => {
     let cancelled = false;
@@ -76,7 +78,7 @@ export default function LogosReaderApp() {
       setChapters([]);
 
       try {
-        const nextBibles = mode === "live" ? await liveApi.getBibles("eng") : getDemoBibles();
+        const nextBibles = mode === "live" ? await liveApi.getBibles(selectedLanguage) : getDemoBibles();
         if (cancelled) {
           return;
         }
@@ -135,7 +137,7 @@ export default function LogosReaderApp() {
     return () => {
       cancelled = true;
     };
-  }, [mode]);
+  }, [mode, selectedLanguage]);
 
   async function selectBible(bible: BibleSummary) {
     setCurrentBible(bible);
@@ -154,6 +156,10 @@ export default function LogosReaderApp() {
     } finally {
       setBusyLabel("");
     }
+  }
+
+  function handleLanguageChange(language: string) {
+    setSelectedLanguage(language);
   }
 
   async function selectBook(book: Book) {
@@ -392,9 +398,13 @@ export default function LogosReaderApp() {
             books={books}
             chapters={chapters}
             loading={Boolean(busyLabel)}
+            selectedLanguage={selectedLanguage}
+            languageOptions={languageOptions}
+            languageDisabled={mode === "demo"}
             currentBibleId={currentBible?.id}
             currentBookId={currentBook?.id}
             currentChapterId={currentChapter?.id}
+            onLanguageChange={handleLanguageChange}
             onSelectBible={selectBible}
             onSelectBook={selectBook}
             onSelectChapter={(chapter) => void loadChapter(chapter.id, chapter.bookId)}
@@ -430,6 +440,10 @@ export default function LogosReaderApp() {
                     <div className="mt-1 text-sm text-text">
                       {mode === "live" ? "API.Bible live browser mode" : "Fallback bundled reader"}
                     </div>
+                  </div>
+                  <div className="rounded-[1.35rem] border border-border bg-surface/70 px-4 py-3">
+                    <div className="text-xs uppercase tracking-[0.22em] text-muted">Language</div>
+                    <div className="mt-1 text-sm text-text">{mode === "demo" ? "English (fallback)" : languageLabel(selectedLanguage)}</div>
                   </div>
                   <div className="rounded-[1.35rem] border border-border bg-surface/70 px-4 py-3">
                     <div className="text-xs uppercase tracking-[0.22em] text-muted">Activity</div>

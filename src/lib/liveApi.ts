@@ -1,4 +1,5 @@
 import type { BibleSummary, Book, Chapter, ChapterContent, SearchData } from "./types";
+import { normalizeBibleSummary } from "./bibleMeta";
 
 const publicApiBibleKey = import.meta.env.PUBLIC_API_BIBLE_KEY ?? "";
 const liveApiBase = (import.meta.env.PUBLIC_LOGOS_API_BASE ?? "").replace(/\/$/, "");
@@ -43,7 +44,7 @@ export const liveApi = {
     const bibles = unwrapData(
       await fetchJSON<Omit<BibleSummary, "source">[] | Envelope<Omit<BibleSummary, "source">[]>>(`/bibles${query}`),
     );
-    return bibles.map((bible) => ({ ...bible, source: "api" as const }));
+    return bibles.map((bible) => ({ ...normalizeBibleSummary(bible), source: "api" as const }));
   },
   async getBooks(bibleId: string) {
     return unwrapData(await fetchJSON<Book[] | Envelope<Book[]>>(`/bibles/${bibleId}/books`));
