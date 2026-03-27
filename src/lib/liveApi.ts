@@ -52,7 +52,11 @@ export const liveApi = {
     return unwrapData(await fetchJSON<Chapter[] | Envelope<Chapter[]>>(`/bibles/${bibleId}/books/${bookId}/chapters`));
   },
   async getChapter(bibleId: string, chapterId: string) {
-    return unwrapData(await fetchJSON<ChapterContent | Envelope<ChapterContent>>(`/bibles/${bibleId}/chapters/${chapterId}`));
+    return unwrapData(
+      await fetchJSON<ChapterContent | Envelope<ChapterContent>>(
+        `/bibles/${bibleId}/chapters/${chapterId}?content-type=text&include-verse-numbers=true&include-titles=true&include-chapter-numbers=false`,
+      ),
+    );
   },
   async search(bibleId: string, query: string, limit = 20) {
     return unwrapData(

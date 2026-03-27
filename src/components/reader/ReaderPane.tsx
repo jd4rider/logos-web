@@ -24,8 +24,27 @@ function renderWordSegment(segment: string, paragraphIndex: number): ReactNode[]
   return parts;
 }
 
+function normalizeContent(content: string) {
+  if (!/<[a-z][\s\S]*>/i.test(content)) {
+    return content;
+  }
+
+  return content
+    .replace(/<br\s*\/?>/gi, "\n")
+    .replace(/<\/p>/gi, "\n\n")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&amp;/g, "&")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/\s+\n/g, "\n")
+    .replace(/\n{3,}/g, "\n\n");
+}
+
 function parseContent(content: string): ReactNode[] {
-  const cleaned = content.replace(/¶/g, "").trim();
+  const cleaned = normalizeContent(content).replace(/¶/g, "").trim();
   const paragraphs = cleaned.split(/\n+/);
 
   return paragraphs.map((paragraph, paragraphIndex) => {
