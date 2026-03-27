@@ -26,7 +26,7 @@ import SiteLayout from "../layouts/SiteLayout.astro";
             Best fit for the current Wails build. Use the menu bar flow, keep the reader close at hand, and move into
             deeper study without keeping a heavy browser tab open.
           </p>
-          <a href="https://github.com/jd4rider/logos/releases" target="_blank" rel="noreferrer" class="mt-6 inline-flex cta-primary">
+          <a href="https://github.com/jd4rider/logos-releases/releases" target="_blank" rel="noreferrer" class="mt-6 inline-flex cta-primary">
             View releases
           </a>
         </article>
@@ -38,7 +38,7 @@ import SiteLayout from "../layouts/SiteLayout.astro";
             Use the desktop build when you want richer reading, AI help, and future exports or sermon prep in a more
             persistent workspace.
           </p>
-          <a href="https://github.com/jd4rider/logos/releases" target="_blank" rel="noreferrer" class="mt-6 inline-flex cta-secondary">
+          <a href="https://github.com/jd4rider/logos-releases/releases" target="_blank" rel="noreferrer" class="mt-6 inline-flex cta-secondary">
             Release page
           </a>
         </article>
@@ -50,7 +50,7 @@ import SiteLayout from "../layouts/SiteLayout.astro";
             Ideal for technical users who care about local models, offline workflows, CLI/TUI flexibility, and direct
             configuration control.
           </p>
-          <a href="https://github.com/jd4rider/logos/releases" target="_blank" rel="noreferrer" class="mt-6 inline-flex cta-secondary">
+          <a href="https://github.com/jd4rider/logos-releases/releases" target="_blank" rel="noreferrer" class="mt-6 inline-flex cta-secondary">
             Release page
           </a>
         </article>
@@ -67,6 +67,36 @@ import SiteLayout from "../layouts/SiteLayout.astro";
           </ul>
         </div>
 
+        <div class="surface-card p-8">
+          <p class="eyebrow">Power Users</p>
+          <div class="mt-4 space-y-5 text-sm leading-7 text-muted">
+            <div>
+              <p class="text-xs uppercase tracking-[0.22em] text-text">Homebrew</p>
+              <code class="mt-2 block overflow-x-auto rounded-2xl border border-border/70 bg-bg/70 px-4 py-3 text-xs text-gold">
+                brew tap jd4rider/logos-ai https://github.com/jd4rider/homebrew-logos-ai
+                <br />
+                brew install --cask logos-ai
+              </code>
+            </div>
+            <div>
+              <p class="text-xs uppercase tracking-[0.22em] text-text">Scoop</p>
+              <code class="mt-2 block overflow-x-auto rounded-2xl border border-border/70 bg-bg/70 px-4 py-3 text-xs text-gold">
+                scoop bucket add logos-ai https://github.com/jd4rider/scoop-logos-ai
+                <br />
+                scoop install logos-ai
+              </code>
+            </div>
+            <div>
+              <p class="text-xs uppercase tracking-[0.22em] text-text">Shell Install</p>
+              <code class="mt-2 block overflow-x-auto rounded-2xl border border-border/70 bg-bg/70 px-4 py-3 text-xs text-gold">
+                curl -fsSL https://raw.githubusercontent.com/jd4rider/logos-releases/main/install.sh | bash
+              </code>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="mt-10 grid gap-6 lg:grid-cols-1">
         <div class="surface-card p-8">
           <p class="eyebrow">Setup</p>
           <p class="mt-4 text-sm leading-7 text-muted">
