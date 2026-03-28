@@ -45,26 +45,24 @@ import SiteLayout from "../layouts/SiteLayout.astro";
 
         <div class="surface-card p-8">
           <p class="eyebrow">Command Paths</p>
-          <div class="mt-4 space-y-5 text-sm leading-7 text-muted">
-            <div>
-              <p class="text-xs uppercase tracking-[0.22em] text-text">Homebrew</p>
-              <code class="mt-2 block overflow-x-auto rounded-2xl border border-border/70 bg-bg/70 px-4 py-3 text-xs text-gold">
-                brew tap jd4rider/logos-ai https://github.com/jd4rider/homebrew-logos-ai
-                <br />
-                brew install --cask logos-ai
+          <div class="mt-4 space-y-4 text-sm leading-7 text-muted">
+            <div class="rounded-[1.5rem] border border-border/70 bg-bg/45 p-4 lg:flex lg:items-start lg:gap-5">
+              <p class="text-xs uppercase tracking-[0.22em] text-text lg:min-w-[7rem] lg:pt-3">Homebrew</p>
+              <code class="mt-2 block overflow-x-auto rounded-2xl border border-border/70 bg-bg/70 px-4 py-3 text-xs text-gold lg:mt-0 lg:flex-1">
+                <span class="block">brew tap jd4rider/logos-ai https://github.com/jd4rider/homebrew-logos-ai</span>
+                <span class="block">brew install --cask logos-ai</span>
               </code>
             </div>
-            <div>
-              <p class="text-xs uppercase tracking-[0.22em] text-text">Scoop</p>
-              <code class="mt-2 block overflow-x-auto rounded-2xl border border-border/70 bg-bg/70 px-4 py-3 text-xs text-gold">
-                scoop bucket add logos-ai https://github.com/jd4rider/scoop-logos-ai
-                <br />
-                scoop install logos-ai
+            <div class="rounded-[1.5rem] border border-border/70 bg-bg/45 p-4 lg:flex lg:items-start lg:gap-5">
+              <p class="text-xs uppercase tracking-[0.22em] text-text lg:min-w-[7rem] lg:pt-3">Scoop</p>
+              <code class="mt-2 block overflow-x-auto rounded-2xl border border-border/70 bg-bg/70 px-4 py-3 text-xs text-gold lg:mt-0 lg:flex-1">
+                <span class="block">scoop bucket add logos-ai https://github.com/jd4rider/scoop-logos-ai</span>
+                <span class="block">scoop install logos-ai</span>
               </code>
             </div>
-            <div>
-              <p class="text-xs uppercase tracking-[0.22em] text-text">Shell Install</p>
-              <code class="mt-2 block overflow-x-auto rounded-2xl border border-border/70 bg-bg/70 px-4 py-3 text-xs text-gold">
+            <div class="rounded-[1.5rem] border border-border/70 bg-bg/45 p-4 lg:flex lg:items-start lg:gap-5">
+              <p class="text-xs uppercase tracking-[0.22em] text-text lg:min-w-[7rem] lg:pt-3">Shell Install</p>
+              <code class="mt-2 block overflow-x-auto rounded-2xl border border-border/70 bg-bg/70 px-4 py-3 text-xs text-gold lg:mt-0 lg:flex-1">
                 curl -fsSL https://raw.githubusercontent.com/jd4rider/logos-releases/main/install.sh | bash
               </code>
             </div>
