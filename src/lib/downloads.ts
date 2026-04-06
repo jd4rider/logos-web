@@ -1,7 +1,7 @@
-export const latestReleaseBase = 'https://github.com/jd4rider/logos-releases/releases/latest/download';
+export const latestReleaseBase = 'https://github.com/jd4rider/logos/releases/latest/download';
 
 export const downloadLinks = {
-  releases: 'https://github.com/jd4rider/logos-releases/releases/latest',
+  releases: 'https://github.com/jd4rider/logos/releases/latest',
   installDocs: 'https://docs.logos-ai.online/getting-started/desktop-install/',
   voiceDocs: 'https://docs.logos-ai.online/setup/voices/',
   ollamaDocs: 'https://docs.logos-ai.online/setup/ollama/',
