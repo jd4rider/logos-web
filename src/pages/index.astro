@@ -1,6 +1,7 @@
 ---
 import PageFrame from "../components/PageFrame.astro";
 import SiteLayout from "../layouts/SiteLayout.astro";
+import { downloadLinks } from "../lib/downloads";
 ---
 
 <SiteLayout
@@ -110,18 +111,17 @@ import SiteLayout from "../layouts/SiteLayout.astro";
             </p>
             <div class="mt-6 flex flex-wrap gap-4">
               <a
-                href="https://github.com/jd4rider/logos-releases/releases/latest"
+                href={downloadLinks.windowsInstaller}
                 target="_blank"
                 rel="noreferrer"
                 class="cta-primary"
               >
-                Open release
+                Download for Windows
               </a>
-              <a href="/download" class="cta-secondary">All download options</a>
+              <a href={downloadLinks.macosPkg} target="_blank" rel="noreferrer" class="cta-secondary">macOS installer</a>
+              <a href={downloadLinks.linuxDeb} target="_blank" rel="noreferrer" class="cta-secondary">Linux .deb</a>
               <a href="/support" class="cta-secondary">Support and setup help</a>
-              <a href="https://docs.logos-ai.online/setup/voices/" target="_blank" rel="noreferrer" class="cta-secondary">
-                Kokoro setup
-              </a>
+              <a href="/download" class="cta-secondary">All download options</a>
             </div>
           </div>
 
@@ -146,6 +146,10 @@ import SiteLayout from "../layouts/SiteLayout.astro";
                 curl -fsSL https://raw.githubusercontent.com/jd4rider/logos-releases/main/install.sh | bash
               </code>
             </div>
+            <p class="rounded-[1.5rem] border border-border bg-bg/45 p-4 text-sm leading-7 text-muted">
+              First launch can open a guided local setup window that prepares Kokoro, a private Python runtime, and the
+              recommended Ollama models for local AI on the machine.
+            </p>
           </div>
         </div>
       </section>
@@ -210,9 +214,11 @@ import SiteLayout from "../layouts/SiteLayout.astro";
               dedicated study desk instead of a browser tab.
             </p>
             <div class="mt-8 flex flex-wrap gap-3">
-              <a href="/download" class="inline-flex cta-secondary">See downloads</a>
-              <a href="https://docs.logos-ai.online/setup/voices/" target="_blank" rel="noreferrer" class="inline-flex cta-secondary">
-                Voice setup
+              <a href={downloadLinks.windowsInstaller} target="_blank" rel="noreferrer" class="inline-flex cta-secondary">
+                Windows installer
+              </a>
+              <a href={downloadLinks.macosPkg} target="_blank" rel="noreferrer" class="inline-flex cta-secondary">
+                macOS installer
               </a>
             </div>
           </article>

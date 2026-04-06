@@ -1,6 +1,7 @@
 ---
 import PageFrame from "../components/PageFrame.astro";
 import SiteLayout from "../layouts/SiteLayout.astro";
+import { downloadLinks } from "../lib/downloads";
 ---
 
 <SiteLayout
@@ -28,17 +29,17 @@ import SiteLayout from "../layouts/SiteLayout.astro";
             that can also be offered as a paid convenience service.
           </p>
           <div class="mt-6 flex flex-wrap gap-4">
-            <a href="https://github.com/jd4rider/logos-releases/releases/latest" target="_blank" rel="noreferrer" class="cta-primary">
-              Open release
+            <a href={downloadLinks.windowsInstaller} target="_blank" rel="noreferrer" class="cta-primary">
+              Windows installer
             </a>
-            <a href="https://docs.logos-ai.online/getting-started/desktop-install/" target="_blank" rel="noreferrer" class="cta-secondary">
+            <a href={downloadLinks.macosPkg} target="_blank" rel="noreferrer" class="cta-secondary">
+              macOS installer
+            </a>
+            <a href={downloadLinks.linuxDeb} target="_blank" rel="noreferrer" class="cta-secondary">
+              Linux .deb
+            </a>
+            <a href={downloadLinks.installDocs} target="_blank" rel="noreferrer" class="cta-secondary">
               Install docs
-            </a>
-            <a href="/support" class="cta-secondary">
-              Support and setup help
-            </a>
-            <a href="https://docs.logos-ai.online/setup/voices/" target="_blank" rel="noreferrer" class="cta-secondary">
-              Kokoro setup
             </a>
           </div>
         </div>
@@ -78,8 +79,8 @@ import SiteLayout from "../layouts/SiteLayout.astro";
             Best fit for the current Wails build. Use the menu bar flow, keep the reader close at hand, and move into
             deeper study without keeping a heavy browser tab open.
           </p>
-          <a href="https://github.com/jd4rider/logos-releases/releases" target="_blank" rel="noreferrer" class="mt-6 inline-flex cta-primary">
-            View releases
+          <a href={downloadLinks.macosPkg} target="_blank" rel="noreferrer" class="mt-6 inline-flex cta-primary">
+            Download `.pkg`
           </a>
         </article>
 
@@ -90,8 +91,8 @@ import SiteLayout from "../layouts/SiteLayout.astro";
             Use the desktop build when you want richer reading, AI help, and future exports or sermon prep in a more
             persistent workspace.
           </p>
-          <a href="https://github.com/jd4rider/logos-releases/releases" target="_blank" rel="noreferrer" class="mt-6 inline-flex cta-secondary">
-            Release page
+          <a href={downloadLinks.windowsInstaller} target="_blank" rel="noreferrer" class="mt-6 inline-flex cta-primary">
+            Download `.exe`
           </a>
         </article>
 
@@ -102,8 +103,8 @@ import SiteLayout from "../layouts/SiteLayout.astro";
             Ideal for technical users who care about local models, offline workflows, CLI/TUI flexibility, and direct
             configuration control.
           </p>
-          <a href="https://github.com/jd4rider/logos-releases/releases" target="_blank" rel="noreferrer" class="mt-6 inline-flex cta-secondary">
-            Release page
+          <a href={downloadLinks.linuxAppImage} target="_blank" rel="noreferrer" class="mt-6 inline-flex cta-secondary">
+            Download AppImage
           </a>
         </article>
       </section>
@@ -127,11 +128,19 @@ import SiteLayout from "../layouts/SiteLayout.astro";
             English-first, while other languages depend on matching Piper voices or the system voices installed on the
             device.
           </p>
+          <p class="mt-4 text-sm leading-7 text-muted">
+            The current desktop installer can open a local setup window on first launch so the machine can prepare a
+            private Python runtime, download Kokoro assets, and pull the lightweight Ollama chat plus embeddings
+            models without making the user assemble it by hand.
+          </p>
           <div class="mt-6 flex flex-wrap gap-4">
-            <a href="https://docs.logos-ai.online/setup/voices/" target="_blank" rel="noreferrer" class="cta-secondary">
+            <a href={downloadLinks.voiceDocs} target="_blank" rel="noreferrer" class="cta-secondary">
               Open voice docs
             </a>
-            <a href="https://docs.logos-ai.online/getting-started/desktop-install/" target="_blank" rel="noreferrer" class="cta-secondary">
+            <a href={downloadLinks.ollamaDocs} target="_blank" rel="noreferrer" class="cta-secondary">
+              Ollama setup
+            </a>
+            <a href={downloadLinks.installDocs} target="_blank" rel="noreferrer" class="cta-secondary">
               Install guide
             </a>
           </div>
@@ -151,6 +160,7 @@ import SiteLayout from "../layouts/SiteLayout.astro";
             <a href="https://docs.logos-ai.online" target="_blank" rel="noreferrer" class="cta-primary">Open docs</a>
             <a href="/support" class="cta-secondary">Support and setup help</a>
             <a href="/try" class="cta-secondary">Open web reader</a>
+            <a href={downloadLinks.releases} target="_blank" rel="noreferrer" class="cta-secondary">Release notes</a>
           </div>
         </div>
       </section>
